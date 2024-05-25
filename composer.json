@@ -1,11 +1,12 @@
 {
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
+            "App\\": "app/",
             "App\\Migrations\\": "database/migrations/"
         }
     },
     "require": {
-        "illuminate/database": "^8.83"
+        "illuminate/database": "^8.83",
+        "respect/validation": "^2.2"
     }
 }

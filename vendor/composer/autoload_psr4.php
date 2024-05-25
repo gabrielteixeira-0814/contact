@@ -18,6 +18,8 @@ return array(
     'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
     'Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
+    'Respect\\Validation\\' => array($vendorDir . '/respect/validation/library'),
+    'Respect\\Stringifier\\' => array($vendorDir . '/respect/stringifier/src'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'Psr\\Clock\\' => array($vendorDir . '/psr/clock/src'),
@@ -29,5 +31,5 @@ return array(
     'Carbon\\Doctrine\\' => array($vendorDir . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'App\\Migrations\\' => array($baseDir . '/database/migrations'),
-    'App\\' => array($baseDir . '/src'),
+    'App\\' => array($baseDir . '/app'),
 );
