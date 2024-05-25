@@ -63,6 +63,7 @@ class ComposerStaticInit8afe660694b37d2b5348891ac7630478
         ),
         'A' => 
         array (
+            'App\\Migrations\\' => 15,
             'App\\' => 4,
         ),
     );
@@ -158,9 +159,13 @@ class ComposerStaticInit8afe660694b37d2b5348891ac7630478
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+        'App\\Migrations\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/database/migrations',
+        ),
         'App\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/app',
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

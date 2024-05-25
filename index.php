@@ -1,28 +1,27 @@
 <?php
 
-require "vendor/autoload.php";
+require_once __DIR__ ."/vendor/autoload.php";
+require_once __DIR__ ."/src/routes/main.php";
 
-use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Migrations\Funcionario;
-
-$capsule = new Capsule();
-
-$config = [
-    "driver" => "mysql",
-    "host" => "127.0.0.1",
-    "database" => "contacts",
-    "username" => "root",
-    "password" => "",
-
-    "charset" => "utf8",
-    "collation" => "utf8_unicode_ci",
-    "prefix" => ""
-];
-
-$capsule->addConnection($config);
-$capsule->setAsGlobal();
-$capsule->bootEloquent();
+use App\Core\Core;
+use App\Http\Route;
 
 
-$funcionario = new Funcionario();
-$funcionario->up();
+Core::dispatch(Route::routes());
+
+
+
+// use App\Models\Funcionario;
+
+// require "bootstrap.php";
+
+// $funcionario = Funcionario::find(1);
+
+// print_r($funcionario->nome);
+
+// // Criar
+// $funcionario = new Funcionario();
+// // $funcionario->nome = "Paulo Reis";
+// // $funcionario->sexo = "M";
+// // $funcionario->data_nascimento = "1995-02-06";
+// // $funcionario->save();
