@@ -15,6 +15,10 @@ class UserController
         $this->userService = $userService;
     }
 
+    /**
+     * @param Response $response
+     * @return Response 
+     */
     public function list(Response $response)
     {
         $userService = $this->userService->list();
@@ -35,6 +39,11 @@ class UserController
         ], 201);
     }
 
+    /**
+     * @param Response $response
+     * @param int $id
+     * @return Response 
+     */
     public function get(Response $response, $id)
     {
         $userService = $this->userService->get($id);
@@ -55,6 +64,11 @@ class UserController
         ], 200);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response 
+     */
     public function store(Request $request, Response $response)
     {
         if (!$body = $request::body()) {
@@ -84,6 +98,12 @@ class UserController
         ], 201);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param int $id
+     * @return Response 
+     */
     public function update(Request $request, Response $response, $id)
     {
         if (!$body = $request::body()) {
@@ -113,6 +133,11 @@ class UserController
         ], 200);
     }
 
+    /**
+     * @param Response $response
+     * @param int $id
+     * @return Response 
+     */
     public function delete(Response $response, $id)
     {
         $userService = $this->userService->delete($id);
