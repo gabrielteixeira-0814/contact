@@ -15,11 +15,12 @@ class UserController
         $this->userService = $userService;
     }
 
-    public function get(Response $response, $id)
+    public function list(Response $response)
     {
-        $userService = $this->userService->get($id);
-
+        $userService = $this->userService->list();
+        
         if (isset($userService['error'])) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -27,17 +28,37 @@ class UserController
             ], 400);
         }
 
-        $response::json([
+        return $response::json([
+            'error'   => false,
+            'success' => true,
+            'data'    => $userService
+        ], 201);
+    }
+
+    public function get(Response $response, $id)
+    {
+        $userService = $this->userService->get($id);
+
+        if (isset($userService['error'])) {
+
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => $userService['error']
+            ], 400);
+        }
+
+        return $response::json([
             'error'   => false,
             'success' => true,
             'message' => $userService
         ], 200);
-        return;
     }
 
     public function store(Request $request, Response $response)
     {
         if (!$body = $request::body()) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -48,6 +69,7 @@ class UserController
         $userService = $this->userService->store($body);
 
         if (isset($userService['error'])) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -65,6 +87,7 @@ class UserController
     public function update(Request $request, Response $response, $id)
     {
         if (!$body = $request::body()) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -75,6 +98,7 @@ class UserController
         $userService = $this->userService->update($body, $id);
 
         if (isset($userService['error'])) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -82,12 +106,11 @@ class UserController
             ], 400);
         }
 
-        $response::json([
+        return $response::json([
             'error'   => false,
             'success' => true,
             'message' => $userService
         ], 200);
-        return;
     }
 
     public function delete(Response $response, $id)
@@ -95,6 +118,7 @@ class UserController
         $userService = $this->userService->delete($id);
 
         if (isset($userService['error'])) {
+
             return $response::json([
                 'error'   => true,
                 'success' => false,
@@ -102,11 +126,10 @@ class UserController
             ], 400);
         }
 
-        $response::json([
+        return $response::json([
             'error'   => false,
             'success' => true,
             'message' => $userService
         ], 200);
-        return;
     }
 }

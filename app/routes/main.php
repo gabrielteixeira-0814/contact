@@ -2,6 +2,7 @@
 
 use App\Http\Route;
 
+Route::get('/',                     'UserController@list');
 Route::get('/{id}',                 'UserController@get');
 Route::post('/users/create',        'UserController@store');
 Route::put('/users/update/{id}',    'UserController@update');

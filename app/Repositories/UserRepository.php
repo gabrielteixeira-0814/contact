@@ -9,67 +9,107 @@ use App\Models\User;
 class UserRepository implements UserRepositoryInterface
 {
     private $connection;
+    private $model;
 
     public function __construct()
     {
+        $this->model = new User;
         // $this->connection = Connection::getConnection();
     }
 
-    public function store(array $data)
+    public function list()
     {
-        print_r($data);
-        $user = new User();
-        // foreach ($validatedData as $key => $value) {
-        //     $user->$key = $value;
-        // }
+        try {
 
-        // if (!$user->save()) {
-        //     return ['error' => 'Desculpe, não foi possível criar sua conta.'];
-        // }
+            return $this->model->all();
+        }
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
 
-        // return $validatedData;
-        die();
-        // $sql = "INSERT INTO users (cpf, name, email, password, user_type_id, is_enabled) VALUES (:cpf, :name, :email, :password, :user_type_id, :is_enabled)";
-        // $stmt = $this->connection->prepare($sql);
-        //return $stmt->execute($data);
-    }
-
-    public function users()
-    {
-        $sql = "SELECT * FROM users";
-        $stmt = $this->connection->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['error' => $e->getMessage()];
+        }
     }
 
     public function get($id)
     {
-        $sql = "SELECT * FROM users WHERE id = :id";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            if (!$user = $this->model->find($id)) {
+
+                return ['error' => 'Sorry, the user could not be found.'];
+            }
+
+            return $user;
+        }
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    public function store(array $data)
+    {
+        // $sql = "INSERT INTO users (cpf, name, email, password, user_type_id, is_enabled) VALUES (:cpf, :name, :email, :password, :user_type_id, :is_enabled)";
+        // $stmt = $this->connection->prepare($sql);
+        try {
+            return $this->model->create($data);
+        }
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+
+            return ['error' => $e->getMessage()];
+        }
     }
 
     public function update(array $data, $id)
     {
-        $data['id'] = $id;
-        $sql = "UPDATE users SET cpf = :cpf, name = :name, email = :email, password = :password, user_type_id = :user_type_id, is_enabled = :is_enabled WHERE id = :id";
-        $stmt = $this->connection->prepare($sql);
-        return $stmt->execute($data);
+        try {
+            $user = $this->model->findOrFail($id);
+
+            if (isset($data['password'])) {
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            } else {
+                unset($data['password']);
+            }
+
+            if (!$user->update($data)) {
+
+                return ['error'=> 'Sorry, Unable to edit user.'];
+            }
+
+            return $user->refresh();
+        }
+        catch (Exception $e) {
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+                if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
+                if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            }
+
+            return ['error' => $e->getMessage()];
+        }
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
-        $sql = "UPDATE users SET is_enabled = 0 WHERE id = :id";
-        $stmt = $this->connection->prepare($sql);
-        return $stmt->execute(['id' => $id]);
-    }
+        try {
+            if (!$user = $this->model->find($id)) {
+                return ['error' => 'Sorry, the user could not be found.'];
+            }
 
-    public function getDataUser($cpf)
-    {
-        $sql = "SELECT id, cpf, name, email FROM users WHERE cpf = :cpf";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute(['cpf' => $cpf]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$user->delete()) {
+                return ['error'=> 'Sorry, unable to delete user.'];
+            }
+
+            return "User deleted successfully!";
+        } 
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            return ['error' => $e->getMessage()];
+        }
     }
 }
 ?>
