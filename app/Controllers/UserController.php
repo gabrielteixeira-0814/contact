@@ -8,10 +8,36 @@ use App\Services\UserService;
 
 class UserController
 {
+    public function get(Response $response, $id)
+    {
+        $userService = UserService::get($id);
+
+        if (isset($userService['error'])) {
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => $userService['error']
+            ], 400);
+        }
+
+        $response::json([
+            'error'   => false,
+            'success' => true,
+            'message' => $userService
+        ], 200);
+        return;
+    }
+
     public function store(Request $request, Response $response)
     {
-        $body = $request::body();
-
+        if (!$body = $request::body()) {
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => 'Unable to create user'
+            ], 400); 
+        }
+       
         $userService = UserService::create($body);
 
         if (isset($userService['error'])) {
@@ -29,117 +55,51 @@ class UserController
         ], 201);
     }
 
-    public function login(Request $request, Response $response)
+    public function update(Request $request, Response $response, $id)
     {
-        // $body = $request::body();
+        if (!$body = $request::body()) {
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => 'Unable to create update'
+            ], 400); 
+        }
 
-        // $userService = UserService::auth($body);
+        $userService = UserService::update($body, $id);
 
-        // if (isset($userService['error'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['error']
-        //     ], 400);
-        // }
+        if (isset($userService['error'])) {
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => $userService['error']
+            ], 400);
+        }
 
-        // $response::json([
-        //     'error'   => false,
-        //     'success' => true,
-        //     'jwt'     => $userService
-        // ], 200);
-        // return;
+        $response::json([
+            'error'   => false,
+            'success' => true,
+            'message' => $userService
+        ], 200);
+        return;
     }
 
-    public function fetch(Request $request, Response $response)
+    public function delete(Response $response, $id)
     {
-        // $authorization = $request::authorization();
+        $userService = UserService::delete($id);
 
-        // $userService = UserService::fetch($authorization);
+        if (isset($userService['error'])) {
+            return $response::json([
+                'error'   => true,
+                'success' => false,
+                'message' => $userService['error']
+            ], 400);
+        }
 
-        // if (isset($userService['unauthorized'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['unauthorized']
-        //     ], 401);
-        // }
-
-        // if (isset($userService['error'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['error']
-        //     ], 400);
-        // }
-
-        // $response::json([
-        //     'error'   => false,
-        //     'success' => true,
-        //     'data'    => $userService
-        // ], 200);
-        // return;
-    }
-
-    public function update(Request $request, Response $response)
-    {
-        // $authorization = $request::authorization();
-
-        // $body = $request::body();
-
-        // $userService = UserService::update($authorization, $body);
-
-        // if (isset($userService['unauthorized'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['unauthorized']
-        //     ], 401);
-        // }
-
-        // if (isset($userService['error'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['error']
-        //     ], 400);
-        // }
-
-        // $response::json([
-        //     'error'   => false,
-        //     'success' => true,
-        //     'message' => $userService
-        // ], 200);
-        // return;
-    }
-
-    public function remove(Request $request, Response $response, array $id)
-    {
-        // $authorization = $request::authorization();
-
-        // $userService = UserService::delete($authorization, $id[0]);
-
-        // if (isset($userService['unauthorized'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['unauthorized']
-        //     ], 401);
-        // }
-
-        // if (isset($userService['error'])) {
-        //     return $response::json([
-        //         'error'   => true,
-        //         'success' => false,
-        //         'message' => $userService['error']
-        //     ], 400);
-        // }
-
-        // $response::json([
-        //     'error'   => false,
-        //     'success' => true,
-        //     'message' => $userService
-        // ], 200);
-        // return;
+        $response::json([
+            'error'   => false,
+            'success' => true,
+            'message' => $userService
+        ], 200);
+        return;
     }
 }

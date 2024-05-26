@@ -14,6 +14,22 @@ use App\Models\Funcionario;
 
 class UserService
 {
+    public static function get($id)
+    {
+        try {
+            if (!$user = User::find($id)) {
+                return ['error' => 'Sorry, the user could not be found.'];
+            }
+
+            return $user;
+        }
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            return ['error' => $e->getMessage()];
+        }
+    }
+
     public static function create(array $data)
     {
         try {
@@ -48,6 +64,9 @@ class UserService
     public static function update(array $data, $id)
     {
         try {
+            if (!$user = User::find($id)) {
+                return ['error' => 'Sorry, the user could not be found'];
+            }
 
             $rules = Validator::rules($data);
 
@@ -55,17 +74,14 @@ class UserService
 
             unset($validatedData['password_confirmation']);
 
-            $user = new User();
-
-            if (!$user->find($id)) {
-                return ['error' => 'Desculpe, não foi possível encontrar o usuário.'];
-            }
-
             foreach ($validatedData as $key => $value) {
+                if ($key == 'password') {
+                    $value = password_hash($value, PASSWORD_DEFAULT);
+                }
                 $user->$key = $value;
             }
 
-            if (!$user->update($id)) {
+            if (!$user->save()) {
                 return ['error'=> 'Sorry, we could not update your account.'];
             }
 
@@ -79,29 +95,23 @@ class UserService
         }
     }
 
-    // public static function delete(mixed $authorization, int|string $id)
-    // {
-    //     // try {
-    //     //     if (isset($authorization['error'])) {
-    //     //         return ['unauthorized'=> $authorization['error']];
-    //     //     }
+    public static function delete($id)
+    {
+        try {
+            if (!$user = User::find($id)) {
+                return ['error' => 'Sorry, the user could not be found.'];
+            }
 
-    //     //     $userFromJWT = JWT::verify($authorization);
+            if (!$user->delete()) {
+                return ['error'=> 'Sorry, we could not delete your account.'];
+            }
 
-    //     //     if (!$userFromJWT) return ['unauthorized'=> "Please, login to access this resource."];
-
-    //     //     $user = User::delete($id);
-
-    //     //     if (!$user) return ['error'=> 'Sorry, we could not delete your account.'];
-
-    //     //     return "User deleted successfully!";
-    //     // } 
-    //     // catch (PDOException $e) {
-    //     //     if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-    //     //     return ['error' => $e->getMessage()];
-    //     // }
-    //     // catch (Exception $e) {
-    //     //     return ['error' => $e->getMessage()];
-    //     // }
-    // }
+            return "User deleted successfully!";
+        } 
+        catch (Exception $e) {
+            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            return ['error' => $e->getMessage()];
+        }
+    }
 }

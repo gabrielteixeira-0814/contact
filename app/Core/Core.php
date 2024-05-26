@@ -40,7 +40,19 @@ class Core
 
                 $controller = $prefixController . $controller;
                 $extendController = new $controller();
-                $extendController->$action(new Request, new Response, $matches);
+
+                if (Request::method() === 'PUT') {
+                    $extendController->$action(new Request, new Response, $matches[0]);
+                }
+                else if (Request::method() === 'GET') {
+                    $extendController->$action(new Response, $matches[0]);
+                }
+                else if (Request::method() === 'DELETE') {
+                    $extendController->$action(new Response, $matches[0]);
+                }
+                else {
+                    $extendController->$action(new Request, new Response, $matches);
+                }
             }
         }
 
