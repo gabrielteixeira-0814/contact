@@ -4,7 +4,8 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
 use App\Migrations\User;
-use App\Migrations\Funcionario;
+use App\Migrations\Phone;
+use App\Migrations\Address;
 
 function runMigration($migrationInstance, $methodName) {
     try {
@@ -20,16 +21,19 @@ function runMigration($migrationInstance, $methodName) {
 }
 
 $user = new User();
-$funcionario = new Funcionario();
+$phone = new Phone();
+$address = new Address();
 
 $action = $argv[1] ?? null;
 
 if ($action === 'up') {
     runMigration($user, 'up');
-    runMigration($funcionario, 'up');
+    runMigration($phone, 'up');
+    runMigration($address, 'up');
 } elseif ($action === 'down') {
     runMigration($user, 'down');
-    runMigration($funcionario, 'down');
+    runMigration($phone, 'down');
+    runMigration($address, 'down');
 } else {
     echo "Usage: php migrate.php [up|down]\n";
 }

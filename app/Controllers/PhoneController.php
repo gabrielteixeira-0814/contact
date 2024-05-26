@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Services\UserService;
+use App\Services\PhoneService;
 use App\Http\Request;
 use App\Http\Response;
 
-class UserController
+class PhoneController
 {
-    private $userService;
+    private $phoneService;
 
-    public function __construct(UserService $userService)
+    public function __construct(PhoneService $phoneService)
     {
-        $this->userService = $userService;
+        $this->phoneService = $phoneService;
     }
 
     /**
@@ -21,21 +21,21 @@ class UserController
      */
     public function list(Response $response)
     {
-        $userService = $this->userService->list();
+        $phoneService = $this->phoneService->list();
         
-        if (isset($userService['error'])) {
+        if (isset($phoneService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $phoneService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $userService
+            'data'    => $phoneService
         ], 201);
     }
 
@@ -46,21 +46,21 @@ class UserController
      */
     public function get(Response $response, $id)
     {
-        $userService = $this->userService->get($id);
+        $phoneService = $this->phoneService->get($id);
 
-        if (isset($userService['error'])) {
+        if (isset($phoneService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $phoneService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $phoneService
         ], 200);
     }
 
@@ -71,32 +71,30 @@ class UserController
      */
     public function store(Request $request, Response $response)
     {
-        echo 'ola22';
-        die();
         if (!$body = $request::body()) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => 'Unable to create user'
+                'message' => 'Unable to create phone'
             ], 400); 
         }
        
-        $userService = $this->userService->store($body);
+        $phoneService = $this->phoneService->store($body);
 
-        if (isset($userService['error'])) {
+        if (isset($phoneService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $phoneService['error']
             ], 400);
         }
 
         $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $userService
+            'data'    => $phoneService
         ], 201);
     }
 
@@ -117,21 +115,21 @@ class UserController
             ], 400); 
         }
 
-        $userService = $this->userService->update($body, $id);
+        $phoneService = $this->phoneService->update($body, $id);
 
-        if (isset($userService['error'])) {
+        if (isset($phoneService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $phoneService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $phoneService
         ], 200);
     }
 
@@ -142,21 +140,21 @@ class UserController
      */
     public function delete(Response $response, $id)
     {
-        $userService = $this->userService->delete($id);
+        $phoneService = $this->phoneService->delete($id);
 
-        if (isset($userService['error'])) {
+        if (isset($phoneService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $phoneService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $phoneService
         ], 200);
     }
 }

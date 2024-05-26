@@ -4,15 +4,15 @@ namespace App\Services;
 
 require "bootstrap.php";
 
-use App\Repositories\UserRepositoryInterface;
+use App\Repositories\PhoneRepositoryInterface;
 use App\Utils\Validator;
 use Exception;
 
-class UserService
+class PhoneService
 {
     private $repo;
 
-    public function __construct(UserRepositoryInterface $repo)
+    public function __construct(PhoneRepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
@@ -40,7 +40,7 @@ class UserService
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
 
             return ['error' => $e->getMessage()];
         }
@@ -58,7 +58,7 @@ class UserService
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
             if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
+            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
 
             return ['error' => $e->getMessage()];
         }

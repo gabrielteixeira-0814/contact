@@ -3,6 +3,7 @@
 namespace App\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Schema\Blueprint;
 
 class User
 {
@@ -19,6 +20,6 @@ class User
 
     public function down()
     {
-        Capsule::schema()->drop('users');
+        Capsule::schema()->dropIfExists('users');
     }
 }
