@@ -5,16 +5,22 @@ namespace App\Services;
 require "bootstrap.php";
 
 // use App\Http\JWT;
+// use PDOException;
+use App\Models\Funcionario;
+use App\Repositories\UserRepositoryInterface;
 use App\Utils\Validator;
 use Exception;
-// use PDOException;
-use App\Models\User;
-use App\Models\Funcionario;
-
 
 class UserService
 {
-    public static function get($id)
+    private $repo;
+
+    public function __construct(UserRepositoryInterface $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function get($id)
     {
         try {
             if (!$user = User::find($id)) {
@@ -30,28 +36,15 @@ class UserService
         }
     }
 
-    public static function create(array $data)
+    public function store(array $data)
     {
         try {
             $rules = Validator::rules($data);
-
             $validatedData = Validator::validate($data, $rules);
-
             unset($validatedData['password_confirmation']);
-
-            $user = new User();
             $validatedData['password'] = password_hash($validatedData['password'], PASSWORD_DEFAULT);
 
-            foreach ($validatedData as $key => $value) {
-                $user->$key = $value;
-            }
-
-            if (!$user->save()) {
-                return ['error' => 'Desculpe, não foi possível criar sua conta.'];
-            }
-
-            return $validatedData;
-
+            return $this->repo->store($validatedData);
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
@@ -61,7 +54,7 @@ class UserService
         }
     }
 
-    public static function update(array $data, $id)
+    public function update(array $data, $id)
     {
         try {
             if (!$user = User::find($id)) {
@@ -95,7 +88,7 @@ class UserService
         }
     }
 
-    public static function delete($id)
+    public function delete($id)
     {
         try {
             if (!$user = User::find($id)) {

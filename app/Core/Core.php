@@ -7,7 +7,7 @@ use App\Http\Response;
 
 class Core 
 {
-    public static function dispatch(array $routes)
+    public static function dispatch(array $routes, array $dependencies)
     {
         $url = '/';
 
@@ -39,27 +39,55 @@ class Core
                 [$controller, $action] = explode('@', $route['action']);
 
                 $controller = $prefixController . $controller;
-                $extendController = new $controller();
+                
+                // Verifique se a classe do controlador existe
+                if (!class_exists($controller)) {
+                    Response::json([
+                        'error'   => true,
+                        'success' => false,
+                        'message' => 'Controller not found.'
+                    ], 404);
+                    return;
+                }
 
-                if (Request::method() === 'PUT') {
-                    $extendController->$action(new Request, new Response, $matches[0]);
+                // Obtém a dependência correta para o controlador
+                $controllerInstance = new $controller($dependencies[$controller]);
+
+                // Verifique se o método existe no controlador
+                if (!method_exists($controllerInstance, $action)) {
+                    Response::json([
+                        'error'   => true,
+                        'success' => false,
+                        'message' => 'Action not found.'
+                    ], 404);
+                    return;
                 }
-                else if (Request::method() === 'GET') {
-                    $extendController->$action(new Response, $matches[0]);
+
+                // Lida com os diferentes métodos HTTP e seus parâmetros
+                if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                    $controllerInstance->$action(new Request, new Response, ...$matches);
                 }
-                else if (Request::method() === 'DELETE') {
-                    $extendController->$action(new Response, $matches[0]);
+                else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                    $controllerInstance->$action(new Response, ...$matches);
                 }
                 else {
-                    $extendController->$action(new Request, new Response, $matches);
+                    // Método HTTP não suportado
+                    Response::json([
+                        'error'   => true,
+                        'success' => false,
+                        'message' => 'HTTP method not supported.'
+                    ], 405);
                 }
+
+                return; // Saia do loop após encontrar e despachar a rota
             }
         }
 
+        // Se nenhuma rota foi encontrada, use o controlador NotFound
         if (!$routeFound) {
             $controller = $prefixController . 'NotFoundController';
-            $extendController = new $controller();
-            $extendController->index(new Request, new Response);
+            $controllerInstance = new $controller();
+            $controllerInstance->index(new Request, new Response);
         }
     }
 }

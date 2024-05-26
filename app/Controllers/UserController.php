@@ -2,15 +2,22 @@
 
 namespace App\Controllers;
 
+use App\Services\UserService;
 use App\Http\Request;
 use App\Http\Response;
-use App\Services\UserService;
 
 class UserController
 {
+    private $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function get(Response $response, $id)
     {
-        $userService = UserService::get($id);
+        $userService = $this->userService->get($id);
 
         if (isset($userService['error'])) {
             return $response::json([
@@ -38,7 +45,7 @@ class UserController
             ], 400); 
         }
        
-        $userService = UserService::create($body);
+        $userService = $this->userService->store($body);
 
         if (isset($userService['error'])) {
             return $response::json([
@@ -65,7 +72,7 @@ class UserController
             ], 400); 
         }
 
-        $userService = UserService::update($body, $id);
+        $userService = $this->userService->update($body, $id);
 
         if (isset($userService['error'])) {
             return $response::json([
@@ -85,7 +92,7 @@ class UserController
 
     public function delete(Response $response, $id)
     {
-        $userService = UserService::delete($id);
+        $userService = $this->userService->delete($id);
 
         if (isset($userService['error'])) {
             return $response::json([

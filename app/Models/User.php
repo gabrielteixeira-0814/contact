@@ -13,6 +13,8 @@ class User extends Eloquent
         'email',
         'password'
     ];
+
+    protected $hidden = ['password'];
 }
 
 
