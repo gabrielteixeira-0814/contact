@@ -66,7 +66,10 @@ class UserRepository implements UserRepositoryInterface
     public function update(array $data, $id)
     {
         try {
-            $user = $this->model->findOrFail($id);
+            if (!$user = $this->model->find($id)) {
+
+                return ['error'=> 'Sorry, Unable to find user'];
+            }
 
             if (isset($data['password'])) {
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

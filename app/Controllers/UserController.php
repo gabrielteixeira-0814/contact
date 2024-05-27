@@ -71,8 +71,6 @@ class UserController
      */
     public function store(Request $request, Response $response)
     {
-        echo 'ola22';
-        die();
         if (!$body = $request::body()) {
 
             return $response::json([

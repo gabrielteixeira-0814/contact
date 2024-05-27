@@ -19,8 +19,8 @@ Route::delete('/users/{id}/delete','UserController@delete');
 /**
  * Phones
  */
-// Route::get('/phones/list', 'PhoneController@list');
-// Route::get('/phones/{id}', 'PhoneController@get');
-// Route::post('/phones/create', 'PhoneController@store');
-// Route::put('/phones/update/{id}', 'PhoneController@update');
-// Route::delete('/phones/{id}/delete', 'PhoneController@delete');
+Route::get('/phones/list', 'PhoneController@list');
+Route::get('/phones/{id}', 'PhoneController@get');
+Route::post('/phones/create', 'PhoneController@store');
+Route::put('/phones/update/{id}', 'PhoneController@update');
+Route::delete('/phones/{id}/delete', 'PhoneController@delete');

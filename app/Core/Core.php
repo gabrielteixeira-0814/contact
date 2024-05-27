@@ -19,13 +19,23 @@ class Core
 
         $routeFound = false;
 
+        print_r($routes);
+
         foreach ($routes as $route) {
             $pattern = '#^'. preg_replace('/{id}/', '([\w-]+)', $route['path']) .'$#';
+
+                print_r($route['method']);
+                print_r(Request::method());
+                echo '===================';
+
+
 
             if (preg_match($pattern, $url, $matches)) {
                 array_shift($matches);
 
                 $routeFound = true;
+
+                
 
                 if ($route['method'] !== Request::method()) {
                     Response::json([
