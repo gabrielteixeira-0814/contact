@@ -30,17 +30,12 @@ class PhoneService
     public function store(array $data)
     {
         try {
-            $rules = Validator::rules($data);
+            $rules = Validator::rules($data, 'phone');
             $validatedData = Validator::validate($data, $rules);
-            unset($validatedData['password_confirmation']);
-            $validatedData['password'] = password_hash($validatedData['password'], PASSWORD_DEFAULT);
 
             return $this->repo->store($validatedData);
         }
         catch (Exception $e) {
-            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-            if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
 
             return ['error' => $e->getMessage()];
         }
@@ -50,15 +45,12 @@ class PhoneService
     {
         try {
             $rules = Validator::rules($data);
+            $rules = Validator::rules($data, 'phone');
             $validatedData = Validator::validate($data, $rules);
-            unset($validatedData['password_confirmation']);
 
             return $this->repo->update($validatedData, $id);
         }
         catch (Exception $e) {
-            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-            if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
 
             return ['error' => $e->getMessage()];
         }

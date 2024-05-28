@@ -1,34 +1,27 @@
 <?php
 
-require_once __DIR__ . "/vendor/autoload.php";
-require_once __DIR__ . "/app/routes/main.php";
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/app/Routes/api.php';
 
-use App\Core\Core;
-use App\Http\Route;
-use App\Http\Request;
-use App\Http\Response;
+use Src\Router;
 
-// User
-use App\Controllers\UserController;
-use App\Repositories\UserRepository;
 use App\Services\UserService;
+use App\Controllers\UserController; 
+use App\Repositories\UserRepository;
 
-// Phone
-use App\Controllers\PhoneController;
-use App\Repositories\PhoneRepository;
 use App\Services\PhoneService;
+use App\Controllers\PhoneController; 
+use App\Repositories\PhoneRepository;
 
+// Instancie os objetos necessários
 $userRepo = new UserRepository();
 $userService = new UserService($userRepo);
 $userController = new UserController($userService);
 
+// Instancie os objetos necessários
 $phoneRepo = new PhoneRepository();
 $phoneService = new PhoneService($phoneRepo);
 $phoneController = new PhoneController($phoneService);
 
-$dependencies = [
-    'App\\Controllers\\UserController' => $userService,
-    'App\\Controllers\\PhoneController' => $phoneService,
-];
-
-Core::dispatch(Route::routes(), $dependencies);
+Router::setPrefix('/contact');
+Router::dispatch();

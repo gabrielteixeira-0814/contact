@@ -49,15 +49,11 @@ class PhoneRepository implements PhoneRepositoryInterface
 
     public function store(array $data)
     {
-        // $sql = "INSERT INTO phones (cpf, name, email, password, phone_type_id, is_enabled) VALUES (:cpf, :name, :email, :password, :phone_type_id, :is_enabled)";
-        // $stmt = $this->connection->prepare($sql);
         try {
+
             return $this->model->create($data);
         }
         catch (Exception $e) {
-            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-            if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
 
             return ['error' => $e->getMessage()];
         }
@@ -66,12 +62,9 @@ class PhoneRepository implements PhoneRepositoryInterface
     public function update(array $data, $id)
     {
         try {
-            $phone = $this->model->findOrFail($id);
+            if (!$phone = $this->model->find($id)) {
 
-            if (isset($data['password'])) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            } else {
-                unset($data['password']);
+                return ['error'=> 'Sorry, Unable to find phone'];
             }
 
             if (!$phone->update($data)) {

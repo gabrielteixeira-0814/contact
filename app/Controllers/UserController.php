@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Services\UserService;
-use App\Http\Request;
-use App\Http\Response;
+use Src\Request;
+use Src\Response;
 
 class UserController
 {

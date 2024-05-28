@@ -39,6 +39,7 @@ class ComposerStaticInit8afe660694b37d2b5348891ac7630478
             'Symfony\\Component\\Translation\\' => 30,
             'Symfony\\Component\\String\\' => 25,
             'Symfony\\Component\\Console\\' => 26,
+            'Src\\' => 4,
         ),
         'R' => 
         array (
@@ -122,6 +123,10 @@ class ComposerStaticInit8afe660694b37d2b5348891ac7630478
         'Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'Src\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
         'Respect\\Validation\\' => 
         array (

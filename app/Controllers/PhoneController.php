@@ -3,8 +3,8 @@
 namespace App\Controllers;
 
 use App\Services\PhoneService;
-use App\Http\Request;
-use App\Http\Response;
+use Src\Request;
+use Src\Response;
 
 class PhoneController
 {
