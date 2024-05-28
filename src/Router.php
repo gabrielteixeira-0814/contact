@@ -11,6 +11,9 @@ use App\Repositories\PhoneRepository;
 use App\Services\AddressService; 
 use App\Repositories\AddressRepository;
 
+use App\Services\ContactService; 
+use App\Repositories\ContactRepository;
+
 class Router
 {
     private static $routes = [];
@@ -73,7 +76,7 @@ class Router
             error_log("Pattern: $pattern");
 
             if ($route['method'] === $requestMethod && preg_match($pattern, $requestUri, $matches)) {
-                array_shift($matches); // Remove the full match from the results
+                array_shift($matches);
 
                 // Debugging output
                 error_log("Route matched. Executing callback.");
@@ -107,7 +110,7 @@ class Router
                         case 'PhoneController':
                             $controller = "App\\Controllers\\$controller";
                             $phoneService = new PhoneService(new PhoneRepository());
-                            $controllerInstance = new $controller($phoneService); // Corrigido
+                            $controllerInstance = new $controller($phoneService);
 
                             if (Request::method() === 'PUT' || Request::method() === 'POST') {
                                 $controllerInstance->$action(new Request, new Response, ...$matches);
@@ -120,7 +123,20 @@ class Router
                         case 'AddressController':
                             $controller = "App\\Controllers\\$controller";
                             $addressService = new AddressService(new AddressRepository());
-                            $controllerInstance = new $controller($addressService); // Corrigido
+                            $controllerInstance = new $controller($addressService);
+
+                            if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                                $controllerInstance->$action(new Request, new Response, ...$matches);
+                            } else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                                call_user_func_array([$controllerInstance, $action], [new Response(), ...$matches]);
+                            }
+
+                            break;
+
+                        case 'ContactController':
+                            $controller = "App\\Controllers\\$controller";
+                            $contactService = new ContactService(new ContactRepository());
+                            $controllerInstance = new $controller($contactService);
 
                             if (Request::method() === 'PUT' || Request::method() === 'POST') {
                                 $controllerInstance->$action(new Request, new Response, ...$matches);

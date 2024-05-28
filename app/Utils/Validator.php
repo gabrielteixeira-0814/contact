@@ -81,6 +81,25 @@ class Validator
                         ->setTemplate('{{name}} deve ter entre 1 e 10 caracteres.')
                 ];
 
+            case 'contact':
+                return [
+                    'user_id' => v::intVal()->positive()
+                        ->setName('User ID')
+                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                    'address_id' => v::intVal()->positive()
+                        ->setName('Address ID')
+                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                    'phone_id' => v::intVal()->positive()
+                        ->setName('Phone ID')
+                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                    'name' => v::stringType()->length(3, 50)
+                        ->setName('Nome')
+                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                    'email' => v::email()
+                        ->setName('E-mail')
+                        ->setTemplate('{{name}} deve ser um endereço de e-mail válido.')
+                ];
+
             default:
         }
     }

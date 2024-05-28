@@ -20,6 +20,11 @@ use App\Services\AddressService;
 use App\Controllers\AddressController; 
 use App\Repositories\AddressRepository;
 
+// Contact
+use App\Services\ContactService;
+use App\Controllers\ContactController; 
+use App\Repositories\ContactRepository;
+
 $userRepo = new UserRepository();
 $userService = new UserService($userRepo);
 $userController = new UserController($userService);
@@ -31,6 +36,10 @@ $phoneController = new PhoneController($phoneService);
 $addressRepo = new AddressRepository();
 $addressService = new AddressService($addressRepo);
 $addressController = new AddressController($addressService);
+
+$contactRepo = new UserRepository();
+$contactService = new UserService($contactRepo);
+$contactController = new UserController($contactService);
 
 Router::setPrefix('/contact');
 Router::dispatch();

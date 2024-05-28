@@ -31,17 +31,20 @@ apiRoute('post', '/phones/create', 'PhoneController@store');
 apiRoute('put', '/phones/update/{id}', 'PhoneController@update');
 apiRoute('delete', '/phones/{id}/delete', 'PhoneController@delete');
 
-// Router::get('/api/phones/list', 'PhoneController@list');
-// Router::get('/api/phones/{id}', 'PhoneController@get');
-// Router::post('/api/phones/create', 'PhoneController@store');
-// Router::put('/api/phones/update/{id}', 'PhoneController@update');
-// Router::delete('/api/phones/{id}/delete', 'PhoneController@delete');
-
 /**
- * Phones
+ * Address
  */
 apiRoute('get', '/address/list', 'AddressController@list');
 apiRoute('get', '/address/{id}', 'AddressController@get');
 apiRoute('post', '/address/create', 'AddressController@store');
 apiRoute('put', '/address/update/{id}', 'AddressController@update');
 apiRoute('delete', '/address/{id}/delete', 'AddressController@delete');
+
+/**
+ * Contact
+ */
+apiRoute('get', '/contact/list', 'ContactController@list');
+apiRoute('get', '/contact/{id}', 'ContactController@get');
+apiRoute('post', '/contact/create', 'ContactController@store');
+apiRoute('put', '/contact/update/{id}', 'ContactController@update');
+apiRoute('delete', '/contact/{id}/delete', 'ContactController@delete');
