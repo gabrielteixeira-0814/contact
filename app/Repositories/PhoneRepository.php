@@ -77,8 +77,6 @@ class PhoneRepository implements PhoneRepositoryInterface
         catch (Exception $e) {
             if (isset($e->errorInfo[0])) {
                 if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-                if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-                if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
             }
 
             return ['error' => $e->getMessage()];
@@ -100,7 +98,6 @@ class PhoneRepository implements PhoneRepositoryInterface
         } 
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, phone already exists.'];
             return ['error' => $e->getMessage()];
         }
     }

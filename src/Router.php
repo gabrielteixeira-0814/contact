@@ -8,6 +8,9 @@ use App\Repositories\UserRepository;
 use App\Services\PhoneService; 
 use App\Repositories\PhoneRepository;
 
+use App\Services\AddressService; 
+use App\Repositories\AddressRepository;
+
 class Router
 {
     private static $routes = [];
@@ -100,6 +103,7 @@ class Router
                             }
 
                             break;
+
                         case 'PhoneController':
                             $controller = "App\\Controllers\\$controller";
                             $phoneService = new PhoneService(new PhoneRepository());
@@ -112,8 +116,18 @@ class Router
                             }
 
                             break;
-                        case '':
-                            # code...
+
+                        case 'AddressController':
+                            $controller = "App\\Controllers\\$controller";
+                            $addressService = new AddressService(new AddressRepository());
+                            $controllerInstance = new $controller($addressService); // Corrigido
+
+                            if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                                $controllerInstance->$action(new Request, new Response, ...$matches);
+                            } else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                                call_user_func_array([$controllerInstance, $action], [new Response(), ...$matches]);
+                            }
+
                             break;
                         
                         default:

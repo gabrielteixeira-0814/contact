@@ -12,7 +12,7 @@ class Phone
         Capsule::schema()->create('phones', function(Blueprint $table) {
             $table->increments("id");
             $table->integer("user_id")->unsigned();
-            $table->integer("number");
+            $table->string("number");
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

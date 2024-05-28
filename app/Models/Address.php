@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Address extends Eloquent
 {
-    // protected $table = 'phones';
+    protected $table = 'address';
 
-    // protected $fillable = [
-    //     'name', 
-    //     'email',
-    //     'password'
-    // ];
+    protected $fillable = [
+        'user_id', 
+        'number',
+        'public_place',
+        'neighborhood',
+        'city',
+        'state'
+    ];
 }
 
 

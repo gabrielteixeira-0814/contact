@@ -4,16 +4,16 @@ namespace App\Repositories;
 
 use App\Database\Connection;
 use PDO;
-use App\Models\User;
+use App\Models\Address;
 
-class UserRepository implements UserRepositoryInterface
+class AddressRepository implements AddressRepositoryInterface
 {
     private $connection;
     private $model;
 
     public function __construct()
     {
-        $this->model = new User;
+        $this->model = new Address;
         // $this->connection = Connection::getConnection();
     }
 
@@ -33,12 +33,12 @@ class UserRepository implements UserRepositoryInterface
     public function get($id)
     {
         try {
-            if (!$user = $this->model->find($id)) {
+            if (!$address = $this->model->find($id)) {
 
-                return ['error' => 'Sorry, the user could not be found.'];
+                return ['error' => 'Sorry, the address could not be found.'];
             }
 
-            return $user;
+            return $address;
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
@@ -50,12 +50,10 @@ class UserRepository implements UserRepositoryInterface
     public function store(array $data)
     {
         try {
+
             return $this->model->create($data);
         }
         catch (Exception $e) {
-            if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-            if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-            if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
 
             return ['error' => $e->getMessage()];
         }
@@ -64,29 +62,21 @@ class UserRepository implements UserRepositoryInterface
     public function update(array $data, $id)
     {
         try {
-            if (!$user = $this->model->find($id)) {
+            if (!$address = $this->model->find($id)) {
 
-                return ['error'=> 'Sorry, Unable to find user'];
+                return ['error'=> 'Sorry, Unable to find address'];
             }
 
-            if (isset($data['password'])) {
-                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            } else {
-                unset($data['password']);
+            if (!$address->update($data)) {
+
+                return ['error'=> 'Sorry, Unable to edit address.'];
             }
 
-            if (!$user->update($data)) {
-
-                return ['error'=> 'Sorry, Unable to edit user.'];
-            }
-
-            return $user->refresh();
+            return $address->refresh();
         }
         catch (Exception $e) {
             if (isset($e->errorInfo[0])) {
                 if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
-                if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, This email is already registered.'];
-                if ($e->errorInfo[0] === '23505') return ['error' => 'Sorry, user already exists.'];
             }
 
             return ['error' => $e->getMessage()];
@@ -96,15 +86,15 @@ class UserRepository implements UserRepositoryInterface
     public function delete($id)
     {
         try {
-            if (!$user = $this->model->find($id)) {
-                return ['error' => 'Sorry, the user could not be found.'];
+            if (!$address = $this->model->find($id)) {
+                return ['error' => 'Sorry, the address could not be found.'];
             }
 
-            if (!$user->delete()) {
-                return ['error'=> 'Sorry, unable to delete user.'];
+            if (!$address->delete()) {
+                return ['error'=> 'Sorry, unable to delete address.'];
             }
 
-            return "User deleted successfully!";
+            return "Address deleted successfully!";
         } 
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];

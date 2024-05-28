@@ -36,3 +36,12 @@ apiRoute('delete', '/phones/{id}/delete', 'PhoneController@delete');
 // Router::post('/api/phones/create', 'PhoneController@store');
 // Router::put('/api/phones/update/{id}', 'PhoneController@update');
 // Router::delete('/api/phones/{id}/delete', 'PhoneController@delete');
+
+/**
+ * Phones
+ */
+apiRoute('get', '/address/list', 'AddressController@list');
+apiRoute('get', '/address/{id}', 'AddressController@get');
+apiRoute('post', '/address/create', 'AddressController@store');
+apiRoute('put', '/address/update/{id}', 'AddressController@update');
+apiRoute('delete', '/address/{id}/delete', 'AddressController@delete');
