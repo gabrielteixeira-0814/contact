@@ -21,7 +21,7 @@ class PhoneRepository implements PhoneRepositoryInterface
     {
         try {
 
-            return $this->model->all();
+            return $this->model->with('contacts')->get();
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
@@ -33,7 +33,7 @@ class PhoneRepository implements PhoneRepositoryInterface
     public function get($id)
     {
         try {
-            if (!$phone = $this->model->find($id)) {
+            if (!$phone = $this->model->with('contacts')->find($id)) {
 
                 return ['error' => 'Sorry, the phone could not be found.'];
             }

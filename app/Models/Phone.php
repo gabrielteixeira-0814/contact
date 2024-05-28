@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Models\User;
+use App\Models\Contact;
 
 class Phone extends Eloquent
 {
@@ -14,10 +15,10 @@ class Phone extends Eloquent
         'number'
     ];
 
-    // public function users() {
+    public function contacts() {
 
-    //     return $this->belongsTo(User::class, 'user_id');
-    // }
+        return $this->belongsTo(Contact::class, 'contact_id');
+    }
 }
 
 

@@ -33,7 +33,7 @@ class UserRepository implements UserRepositoryInterface
     public function get($id)
     {
         try {
-            if (!$user = $this->model->find($id)) {
+            if (!$user = $this->model->with('contacts')->find($id)) {
 
                 return ['error' => 'Sorry, the user could not be found.'];
             }
