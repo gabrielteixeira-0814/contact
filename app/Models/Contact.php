@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use App\Models\User;
 
 class Contact extends Eloquent
 {
@@ -10,11 +11,14 @@ class Contact extends Eloquent
 
     protected $fillable = [
         'user_id',
-        'address_id', 
-        'phone_id',
         'name',
         'email',
     ];
+
+    public function users() {
+
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
 
 

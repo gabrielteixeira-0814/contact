@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use App\Models\Contact;
 
 class User extends Eloquent
 {
@@ -15,6 +16,11 @@ class User extends Eloquent
     ];
 
     protected $hidden = ['password'];
+
+    public function contacts() {
+
+        return $this->hasMany(Contact::class, 'user_id');
+    }
 }
 
 

@@ -101,5 +101,15 @@ class AddressRepository implements AddressRepositoryInterface
             return ['error' => $e->getMessage()];
         }
     }
+
+    public function checkAddress($contact_id)
+    {
+        $address = $this->model->where('contact_id', '=', $contact_id)->count();
+        if ($address > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }
 ?>

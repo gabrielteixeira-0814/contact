@@ -51,8 +51,8 @@ class Validator
 
             case 'phone':
                 return [
-                    'user_id' => v::intVal()->positive()
-                        ->setName('User ID')
+                    'contact_id' => v::intVal()->positive()
+                        ->setName('Contact ID')
                         ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
                     'number' => v::digit()->length(10, 15)
                         ->setName('Número de Telefone')
@@ -61,8 +61,8 @@ class Validator
 
             case 'address':
                 return [
-                    'user_id' => v::intVal()->positive()
-                        ->setName('User ID')
+                    'contact_id' => v::intVal()->positive()
+                        ->setName('Contact ID')
                         ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
                     'number' => v::digit()->length(1, 5)
                         ->setName('Número')
@@ -85,12 +85,6 @@ class Validator
                 return [
                     'user_id' => v::intVal()->positive()
                         ->setName('User ID')
-                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
-                    'address_id' => v::intVal()->positive()
-                        ->setName('Address ID')
-                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
-                    'phone_id' => v::intVal()->positive()
-                        ->setName('Phone ID')
                         ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
                     'name' => v::stringType()->length(3, 50)
                         ->setName('Nome')

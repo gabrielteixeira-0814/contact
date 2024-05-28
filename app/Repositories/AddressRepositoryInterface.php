@@ -11,5 +11,6 @@ interface AddressRepositoryInterface
     public function get($id);
     public function update(array $data, $id);
     public function delete($id);
+    public function checkAddress(boolean $contact_id);
 }
 ?>

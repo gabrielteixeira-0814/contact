@@ -122,7 +122,7 @@ class Router
 
                         case 'AddressController':
                             $controller = "App\\Controllers\\$controller";
-                            $addressService = new AddressService(new AddressRepository());
+                            $addressService = new AddressService(new AddressRepository(), new ContactRepository());
                             $controllerInstance = new $controller($addressService);
 
                             if (Request::method() === 'PUT' || Request::method() === 'POST') {

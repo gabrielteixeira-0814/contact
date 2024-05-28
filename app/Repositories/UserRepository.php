@@ -21,7 +21,7 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
 
-            return $this->model->all();
+            return $this->model->with('contacts')->get();
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];

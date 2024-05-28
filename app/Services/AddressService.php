@@ -5,6 +5,7 @@ namespace App\Services;
 require "bootstrap.php";
 
 use App\Repositories\AddressRepositoryInterface;
+use App\Repositories\ContactRepositoryInterface;
 use App\Utils\Validator;
 use Exception;
 
@@ -12,9 +13,10 @@ class AddressService
 {
     private $repo;
 
-    public function __construct(AddressRepositoryInterface $repo)
+    public function __construct(AddressRepositoryInterface $repo, ContactRepositoryInterface $contactRepo)
     {
         $this->repo = $repo;
+        $this->contactRepo = $contactRepo;
     }
 
     public function list()
@@ -29,6 +31,10 @@ class AddressService
 
     public function store(array $data)
     {
+        if ($address = $this->repo->checkAddress((int)$data['contact_id'])) {
+            return ['error' => ['There is already an address created for the contact']];
+        }
+
         try {
             $rules = Validator::rules($data, 'address');
             $validatedData = Validator::validate($data, $rules);
