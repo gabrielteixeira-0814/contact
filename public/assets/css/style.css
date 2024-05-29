@@ -1,0 +1,24 @@
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background: #f6f9ff;
+    color: #444444;
+  }
+
+  .button-contact {
+    border-radius: 3px;
+    padding: 10px 15px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #000 !important;
+    background-color: #77cc6d;
+}
+
+.button-list-contact{
+    border-radius: 3px;
+    padding: 10px 15px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #000 !important;
+    background-color: #5b6bfa;
+}

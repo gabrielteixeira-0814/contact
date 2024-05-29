@@ -68,7 +68,6 @@ class Router
         error_log("Request URI: $requestUri");
 
         foreach (self::$routes as $route) {
-
             $pattern = '#^' . preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route['path']) . '$#';
 
             error_log("Checking Route: " . $route['method'] . ' ' . $route['path']);
@@ -92,6 +91,20 @@ class Router
                     list($controller, $action) = explode('@', $route['callback']);
 
                     switch ($controller) {
+
+                        // WEB
+                        case 'HomeController':
+                            $controller = "App\\Controllers\\$controller";
+                            $controllerInstance = new $controller();
+
+                            if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                                $controllerInstance->$action(new Request, new Response, ...$matches);
+                            } else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                                call_user_func_array([$controllerInstance, $action], [new Response(), ...$matches]);
+                            }
+
+                            break;
+
                         case 'UserController':
                             $controller = "App\\Controllers\\$controller";
                             $userService = new UserService(new UserRepository());
@@ -105,8 +118,22 @@ class Router
 
                             break;
 
+                        // API
+                        case 'UserController':
+                            $controller = "App\\Controllers\\Api\\$controller";
+                            $userService = new UserService(new UserRepository());
+                            $controllerInstance = new $controller($userService);
+
+                            if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                                $controllerInstance->$action(new Request, new Response, ...$matches);
+                            } else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                                call_user_func_array([$controllerInstance, $action], [new Response(), ...$matches]);
+                            }
+
+                            break;
+
                         case 'PhoneController':
-                            $controller = "App\\Controllers\\$controller";
+                            $controller = "App\\Controllers\\Api\\$controller";
                             $phoneService = new PhoneService(new PhoneRepository());
                             $controllerInstance = new $controller($phoneService);
 
@@ -119,7 +146,7 @@ class Router
                             break;
 
                         case 'AddressController':
-                            $controller = "App\\Controllers\\$controller";
+                            $controller = "App\\Controllers\\Api\\$controller";
                             $addressService = new AddressService(new AddressRepository(), new ContactRepository());
                             $controllerInstance = new $controller($addressService);
 
@@ -132,7 +159,7 @@ class Router
                             break;
 
                         case 'ContactController':
-                            $controller = "App\\Controllers\\$controller";
+                            $controller = "App\\Controllers\\Api\\$controller";
                             $contactService = new ContactService(new ContactRepository());
                             $controllerInstance = new $controller($contactService);
 

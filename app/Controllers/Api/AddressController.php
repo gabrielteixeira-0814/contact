@@ -1,19 +1,18 @@
-<?php
+<?php 
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
-use App\Utils\RenderView;
-use App\Services\UserService;
+use App\Services\AddressService;
 use Src\Request;
 use Src\Response;
 
-class UserController extends RenderView
+class AddressController
 {
-    private $userService;
+    private $addressService;
 
-    public function __construct(UserService $userService)
+    public function __construct(AddressService $addressService)
     {
-        $this->userService = $userService;
+        $this->addressService = $addressService;
     }
 
     /**
@@ -22,21 +21,21 @@ class UserController extends RenderView
      */
     public function list(Response $response)
     {
-        $userService = $this->userService->list();
+        $addressService = $this->addressService->list();
         
-        if (isset($userService['error'])) {
+        if (isset($addressService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $addressService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $userService
+            'data'    => $addressService
         ], 201);
     }
 
@@ -47,21 +46,21 @@ class UserController extends RenderView
      */
     public function get(Response $response, $id)
     {
-        $userService = $this->userService->get($id);
+        $addressService = $this->addressService->get($id);
 
-        if (isset($userService['error'])) {
+        if (isset($addressService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $addressService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $addressService
         ], 200);
     }
 
@@ -77,25 +76,25 @@ class UserController extends RenderView
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => 'Unable to create user'
+                'message' => 'Unable to create address'
             ], 400); 
         }
        
-        $userService = $this->userService->store($body);
+        $addressService = $this->addressService->store($body);
 
-        if (isset($userService['error'])) {
+        if (isset($addressService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $addressService['error']
             ], 400);
         }
 
         $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $userService
+            'data'    => $addressService
         ], 201);
     }
 
@@ -116,21 +115,21 @@ class UserController extends RenderView
             ], 400); 
         }
 
-        $userService = $this->userService->update($body, $id);
+        $addressService = $this->addressService->update($body, $id);
 
-        if (isset($userService['error'])) {
+        if (isset($addressService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $addressService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $addressService
         ], 200);
     }
 
@@ -141,21 +140,21 @@ class UserController extends RenderView
      */
     public function delete(Response $response, $id)
     {
-        $userService = $this->userService->delete($id);
+        $addressService = $this->addressService->delete($id);
 
-        if (isset($userService['error'])) {
+        if (isset($addressService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $userService['error']
+                'message' => $addressService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $userService
+            'message' => $addressService
         ], 200);
     }
 }

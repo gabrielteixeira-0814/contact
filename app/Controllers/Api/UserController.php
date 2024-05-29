@@ -1,18 +1,18 @@
 <?php 
 
-namespace App\Controllers;
+namespace App\Controllers\Api;
 
-use App\Services\AddressService;
+use App\Services\UserService;
 use Src\Request;
 use Src\Response;
 
-class AddressController
+class UserController
 {
-    private $addressService;
+    private $userService;
 
-    public function __construct(AddressService $addressService)
+    public function __construct(UserService $userService)
     {
-        $this->addressService = $addressService;
+        $this->userService = $userService;
     }
 
     /**
@@ -21,21 +21,21 @@ class AddressController
      */
     public function list(Response $response)
     {
-        $addressService = $this->addressService->list();
+        $userService = $this->userService->list();
         
-        if (isset($addressService['error'])) {
+        if (isset($userService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $addressService['error']
+                'message' => $userService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $addressService
+            'data'    => $userService
         ], 201);
     }
 
@@ -46,21 +46,21 @@ class AddressController
      */
     public function get(Response $response, $id)
     {
-        $addressService = $this->addressService->get($id);
+        $userService = $this->userService->get($id);
 
-        if (isset($addressService['error'])) {
+        if (isset($userService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $addressService['error']
+                'message' => $userService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $addressService
+            'message' => $userService
         ], 200);
     }
 
@@ -76,25 +76,25 @@ class AddressController
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => 'Unable to create address'
+                'message' => 'Unable to create user'
             ], 400); 
         }
        
-        $addressService = $this->addressService->store($body);
+        $userService = $this->userService->store($body);
 
-        if (isset($addressService['error'])) {
+        if (isset($userService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $addressService['error']
+                'message' => $userService['error']
             ], 400);
         }
 
         $response::json([
             'error'   => false,
             'success' => true,
-            'data'    => $addressService
+            'data'    => $userService
         ], 201);
     }
 
@@ -115,21 +115,21 @@ class AddressController
             ], 400); 
         }
 
-        $addressService = $this->addressService->update($body, $id);
+        $userService = $this->userService->update($body, $id);
 
-        if (isset($addressService['error'])) {
+        if (isset($userService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $addressService['error']
+                'message' => $userService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $addressService
+            'message' => $userService
         ], 200);
     }
 
@@ -140,21 +140,21 @@ class AddressController
      */
     public function delete(Response $response, $id)
     {
-        $addressService = $this->addressService->delete($id);
+        $userService = $this->userService->delete($id);
 
-        if (isset($addressService['error'])) {
+        if (isset($userService['error'])) {
 
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => $addressService['error']
+                'message' => $userService['error']
             ], 400);
         }
 
         return $response::json([
             'error'   => false,
             'success' => true,
-            'message' => $addressService
+            'message' => $userService
         ], 200);
     }
 }

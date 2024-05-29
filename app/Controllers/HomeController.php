@@ -2,10 +2,14 @@
 
 namespace App\Controllers;
 
-class HomeController 
+use App\Utils\RenderView;
+
+class HomeController extends RenderView
 {
     public function index()
     {
-        echo "Hello World!";
+        $this->loadView('home', [
+            'title' => 'Gabriel'
+        ]);
     }
 }
