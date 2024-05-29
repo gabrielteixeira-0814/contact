@@ -1,0 +1,1 @@
+{"version":1,"defects":{"CalculatorTest::testAdd":4,"UserControllerTest::testListReturnsUserList":4,"UserControllerTest::testListReturnsError":4},"times":{"CalculatorTest::testAdd":0.29,"UserControllerTest::testListReturnsUserList":0.032,"UserControllerTest::testListReturnsError":0.001}}
