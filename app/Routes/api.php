@@ -19,9 +19,6 @@ apiRoute('post', '/users/create', 'UserController@store');
 apiRoute('put', '/users/update/{id}', 'UserController@update');
 apiRoute('delete', '/users/{id}/delete', 'UserController@delete');
 
-// apiRoute('post', '/users/login', 'UserController@login');
-// apiRoute('get', '/users/fetch', 'UserController@fetch');
-
 /**
  * Phones
  */

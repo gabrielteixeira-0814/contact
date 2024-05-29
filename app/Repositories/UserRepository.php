@@ -14,7 +14,6 @@ class UserRepository implements UserRepositoryInterface
     public function __construct()
     {
         $this->model = new User;
-        // $this->connection = Connection::getConnection();
     }
 
     public function list()

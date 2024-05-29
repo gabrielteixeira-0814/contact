@@ -25,18 +25,22 @@ use App\Services\AddressService;
 use App\Controllers\AddressController; 
 use App\Repositories\AddressRepository;
 
+// User
 $userRepo = new UserRepository();
 $userService = new UserService($userRepo);
 $userController = new UserController($userService);
 
+// Contact
 $contactRepo = new ContactRepository();
 $contactService = new ContactService($contactRepo);
 $contactController = new ContactController($contactService);
 
+// Phone
 $phoneRepo = new PhoneRepository();
 $phoneService = new PhoneService($phoneRepo);
 $phoneController = new PhoneController($phoneService);
 
+// Address
 $addressRepo = new AddressRepository();
 $addressService = new AddressService($addressRepo, $contactRepo);
 $addressController = new AddressController($addressService);

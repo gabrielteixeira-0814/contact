@@ -32,66 +32,66 @@ class Validator
             case 'user':
                 return [
                     'name' => v::stringType()->length(3, 50)
-                        ->setName('Nome')
-                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                        ->setName('Name')
+                        ->setTemplate('{{name}} must be between 3 and 50 characters'),
                     'email' => v::email()
                         ->setName('E-mail')
-                        ->setTemplate('{{name}} deve ser um endereço de e-mail válido.'),
+                        ->setTemplate('{{name}} must be a valid email address'),
                     'password' => v::stringType()->length(8, null)
-                        ->setName('Senha')
-                        ->setTemplate('{{name}} deve ter pelo menos 8 caracteres.')
-                        ->regex('/[A-Z]/', '{{name}} deve conter pelo menos uma letra maiúscula.')
-                        ->regex('/[a-z]/', '{{name}} deve conter pelo menos uma letra minúscula.')
-                        ->regex('/[0-9]/', '{{name}} deve conter pelo menos um número.')
-                        ->regex('/[\W]/', '{{name}} deve conter pelo menos um caractere especial.'),
+                        ->setName('Password')
+                        ->setTemplate('{{name}} must be at least 8 characters long')
+                        ->regex('/[A-Z]/', '{{name}} must contain at least one upper case letter.')
+                        ->regex('/[a-z]/', '{{name}} must contain at least one lowercase letter')
+                        ->regex('/[0-9]/', '{{name}} must contain at least one number')
+                        ->regex('/[\W]/', '{{name}} must contain at least one special character'),
                     'password_confirmation' => v::equals($data['password'] ?? null)
-                        ->setName('Confirmação de Senha')
-                        ->setTemplate('A confirmação de senha deve corresponder à senha.')
+                        ->setName('Password Confirmation')
+                        ->setTemplate('Password confirmation must match the password')
                 ];
 
             case 'phone':
                 return [
                     'contact_id' => v::intVal()->positive()
                         ->setName('Contact ID')
-                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                        ->setTemplate('{{name}} must be a positive integer.'),
                     'number' => v::digit()->length(10, 15)
-                        ->setName('Número de Telefone')
-                        ->setTemplate('{{name}} deve ter entre 10 e 15 caracteres e conter apenas dígitos.')
+                        ->setName('Phone number')
+                        ->setTemplate('{{name}} must be between 10 and 15 characters and contain only digits')
                 ];
 
             case 'address':
                 return [
                     'contact_id' => v::intVal()->positive()
                         ->setName('Contact ID')
-                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                        ->setTemplate('{{name}} must be a positive integer'),
                     'number' => v::digit()->length(1, 5)
-                        ->setName('Número')
-                        ->setTemplate('{{name}} deve ter entre 1 e 5 caracteres e conter apenas dígitos.'),
+                        ->setName('Number')
+                        ->setTemplate('{{name}} must be between 1 and 5 characters long and contain only digits'),
                     'public_place' => v::stringType()->length(3, 50)
-                        ->setName('Rua ou Avenida')
-                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                        ->setName('Public place')
+                        ->setTemplate('{{name}} must be between 3 and 50 characters'),
                     'neighborhood' => v::stringType()->length(3, 50)
-                        ->setName('Bairro')
-                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                        ->setName('Neighborhood')
+                        ->setTemplate('{{name}} must be between 3 and 50 characters'),
                     'city' => v::stringType()->length(3, 50)
-                        ->setName('Cidade')
-                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                        ->setName('City')
+                        ->setTemplate('{{name}} must be between 3 and 50 characters'),
                     'state' => v::stringType()->length(1, 10)
-                        ->setName('Estado')
-                        ->setTemplate('{{name}} deve ter entre 1 e 10 caracteres.')
+                        ->setName('State')
+                        ->setTemplate('{{name}} must be between 1 and 10 characters')
                 ];
 
             case 'contact':
                 return [
                     'user_id' => v::intVal()->positive()
                         ->setName('User ID')
-                        ->setTemplate('{{name}} deve ser um número inteiro positivo.'),
+                        ->setTemplate('{{name}} must be a positive integer'),
                     'name' => v::stringType()->length(3, 50)
-                        ->setName('Nome')
-                        ->setTemplate('{{name}} deve ter entre 3 e 50 caracteres.'),
+                        ->setName('Name')
+                        ->setTemplate('{{name}} must be between 3 and 50 characters'),
                     'email' => v::email()
                         ->setName('E-mail')
-                        ->setTemplate('{{name}} deve ser um endereço de e-mail válido.')
+                        ->setTemplate('{{name}} must be a valid email address')
                 ];
 
             default:

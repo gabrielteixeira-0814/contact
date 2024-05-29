@@ -68,17 +68,15 @@ class Router
         error_log("Request URI: $requestUri");
 
         foreach (self::$routes as $route) {
-            // Convert path to regex pattern
+
             $pattern = '#^' . preg_replace('/\{[a-zA-Z0-9_]+\}/', '([a-zA-Z0-9_-]+)', $route['path']) . '$#';
 
-            // Debugging output
             error_log("Checking Route: " . $route['method'] . ' ' . $route['path']);
             error_log("Pattern: $pattern");
 
             if ($route['method'] === $requestMethod && preg_match($pattern, $requestUri, $matches)) {
                 array_shift($matches);
 
-                // Debugging output
                 error_log("Route matched. Executing callback.");
 
                 if (is_callable($route['callback'])) {
@@ -147,7 +145,6 @@ class Router
                             break;
                         
                         default:
-                            # code...
                             break;
                     }
                 }

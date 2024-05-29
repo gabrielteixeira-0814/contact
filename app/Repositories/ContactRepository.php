@@ -14,7 +14,6 @@ class ContactRepository implements ContactRepositoryInterface
     public function __construct()
     {
         $this->model = new Contact;
-        // $this->connection = Connection::getConnection();
     }
 
     public function list()

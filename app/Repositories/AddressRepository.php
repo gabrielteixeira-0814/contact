@@ -14,7 +14,6 @@ class AddressRepository implements AddressRepositoryInterface
     public function __construct()
     {
         $this->model = new Address;
-        // $this->connection = Connection::getConnection();
     }
 
     public function list()

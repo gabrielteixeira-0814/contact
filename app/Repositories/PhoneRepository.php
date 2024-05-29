@@ -14,7 +14,6 @@ class PhoneRepository implements PhoneRepositoryInterface
     public function __construct()
     {
         $this->model = new Phone;
-        // $this->connection = Connection::getConnection();
     }
 
     public function list()
