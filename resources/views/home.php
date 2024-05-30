@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link href="public/assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <title>Contatos</title>
   </head>
@@ -17,13 +19,13 @@
             <div class="col-md-3 bg-white rounded  shadow-lg p-5">
               <h1>Welcome</h1>
               <div class="mt-5">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">Usuário +</button>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">User +</button>
               </div>
               <div class="mt-3">
                   <form>
                       <div class="form-group">
-                          <label for="selectUsers">Usuários</label>
-                          <select class="form-control" v-model="selectedUser">
+                          <label for="selectUsers">Users</label>
+                          <select class="form-control" v-model="selectedUser" @change="getUserContacts(selectedUser)">
                             <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
                           </select>
                       </div>
@@ -45,7 +47,15 @@
             <div class="col-md-9">
               <div class="row justify-content-center mt-5">
                 <div class="col-md-8 bg-white rounded  shadow-lg p-5">
-                  <h2>Create Contact</h2>
+                  <div class="row align-items-center justify-content-between px-3">
+                    <div>
+                      <h2>Create Contact</h2>
+                    </div>
+                    <div v-if="userNameTitle">
+                      <i class="fas fa-user" style="font-size: 20px;"></i>
+                      <span class="font-weight-bold pl-2">{{ userNameTitle }}</span>
+                    </div>
+                  </div>
                   <div class="border rounded p-3 mt-5">
                     <form @submit.prevent="onSubmit">
                         <div class="form-row">
@@ -90,6 +100,48 @@
                     </form>
                   </div>
                 </div>
+                <div class="col-md-8 bg-white rounded  shadow-lg p-5 my-5">
+                  <h2>Lista Contacts</h2>
+                  <div class="border rounded p-3 mt-5">
+                    <div>
+                      <p v-for="contact in contactList" :key="contact.id" :value="contact.id">{{ contact.name }} - {{ contact.email }}</p>
+                    </div>
+                    <div>
+                    <table id="example" class="table table-striped table-bordered" style="width:100%">
+                      <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- @foreach ($users as $user) -->
+                        <tr>
+                          <th scope="row">ola</th>
+
+                            <!-- <th scope="row">{{ $user->id ?? '-' }}</th>
+                            <td>{{ $user->name ?? '-' }}</td>
+                            <td>{{ $user->email ?? '-' }}</td>
+                            <td>{{ $user->usersType->name ?? '-' }}</td>
+                            <td>{{ $user->is_enabled ? 'Ativo' :  'Inativo' }}</td>
+                            <td>
+                                <a href='{{route('user.show',$user->id)}}' class='btn btn-secondary btn-sm'><i class="bi bi-eye-fill"></i></a>
+                                <a href='{{route('user.edit',$user->id)}}' class='btn btn-success btn-sm'><i class="bi bi-pencil"></i></a>
+                                <a href="{{route('delete_user',$user->id)}}" class='btn btn-danger btn-sm'><i class="bi bi-trash-fill"></i></a>
+                            </td> -->
+                          </tr>
+                        <!-- @endforeach -->
+                      </tbody>
+                    </table>
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
             </div>
             <!-- Modal -->
@@ -97,7 +149,7 @@
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="userModalLabel">Criar usuário</h5>
+                    <h5 class="modal-title" id="userModalLabel">Create User</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -123,8 +175,8 @@
                     </form>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" @click="createUser()">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="createUser()">Save</button>
                   </div>
                 </div>
               </div>
@@ -144,6 +196,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese.json"></script>
+
     <script>
       const { createApp } = Vue;
 
@@ -151,6 +207,7 @@
         data() {
           return {
             selectedUser: '',
+            userNameTitle: '',
 
             // Input User
             name: '',
@@ -170,6 +227,7 @@
             ContactState: '',
 
             userslist: [],
+            contactList: [],
 
             isLoading: false
           }
@@ -186,14 +244,33 @@
                   email: this.contactEmail
                 };
 
+                console.log(data);
+
                 try {
                   const res = await axios.post('/contact/web/contact/create', data);
 
                   if (res.data.success) {
-                    this.createAddress(res.data.data.id);
-                    
+                    if (res.data.data.id) {
+
+                      this.createAddress(res.data.data.id)
+                        .then(result => {
+                          if (result) {
+                            console.log("The address was created successfully");
+                          } else {
+                            console.log("Unable to create address");
+                          }
+
+                        })
+                        .catch(error => {
+                          console.error("Erro ao executar a promise:", error);
+                        });
+                    }
+
                     this.isLoading = false;
                     alert('Contact created successfully');
+                    this.selectedUser = '';
+                    this.contactName = '';
+                    this.contactEmail = '';
                   }
                 } catch (err) {
                   this.isLoading = false;
@@ -223,6 +300,11 @@
                 .then(res => {
                   if (res.data.success) {
                     alert('User created successfully');
+
+                    this.userName = '';
+                    this.email = '';
+                    this.password = '';
+                    this.password_confirmation = '';
                   }                
                 })
                 .catch(err => {
@@ -252,32 +334,54 @@
               ) { 
 
               const data = {
+                contact_id: contactId,
+                number: this.contactNumber,
                 public_place: this.contactPublic_place,
                 neighborhood: this.contactNeighborhood,
-                number: this.contactNumber,
                 city: this.contactCity,
                 state: this.ContactState
               };
 
               try {
-                  const res = await axios.post('/contact/web/contact/create', data);
+                  const res = await axios.post('/contact/web/address/create', data);
 
-                  console.log(err);
                   if (res.data.success) {
-                  
+                    console.log('Adrress created successfully');
+                    this.contactNumber = '';
+                    this.contactPublic_place = '';
+                    this.contactNeighborhood = '';
+                    this.contactCity = '';
+                    this.ContactState = '';
+
+                    return true;
                   }
               } catch (err) {
-                console.log(err);
-              }
+                console.log(err.response.data.message);
 
+                return false;
+              }
             }
-            
           },
+
+          async getUserContacts(userId) {
+              console.log(userId, 'ola aqui');
+              try {
+                  const res = await axios.get(`/contact/web/users/${userId}`); 
+
+                  if (res.data.success) {
+                    this.userNameTitle = res.data.message.name;
+                    this.contactList = res.data.message.contacts;
+                    console.log(res.data.message.name);
+                    console.log(res.data.message.contacts);
+                  } 
+              } catch (err) {
+                  console.log(err.data.message);
+              }
+          }
         },
         watch: {
           selectedUser(newVal) {
             console.log('User selected:', newVal);
-            // Aqui você pode adicionar qualquer lógica adicional que precisar ao alterar o valor selecionado
           }
         },
         mounted() {
@@ -285,6 +389,41 @@
         }
       }).mount('#app');
 
+      $(document).ready(function() {
+        $('#example').DataTable({
+            "columnDefs": [
+                { "width": "3%", "targets": 0, "className": "dt-center"  }, // Defina a largura da primeira coluna
+                { "width": "30%", "targets": 1, "className": "dt-center"  },
+                { "width": "35%", "targets": 2 },
+                { "width": "12%", "targets": 3, "className": "dt-center"  },
+                { "width": "10%", "targets": 4, "className": "dt-center"  },
+                // Adicione mais definições de largura conforme necessário para outras colunas
+            ],
+            "language": {
+                "sEmptyTable":     "Nenhum dado encontrado na tabela",
+                "sInfo":           "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando 0 até 0 de 0 registros",
+                "sInfoFiltered":   "(Filtrados de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sInfoThousands":  ".",
+                "sLengthMenu":     "Mostrar _MENU_ resultados por página",
+                "sLoadingRecords": "Carregando...",
+                "sProcessing":     "Processando...",
+                "sZeroRecords":    "Nenhum registro encontrado",
+                "sSearch":         "Pesquisar",
+                "oPaginate": {
+                    "sNext":     "Próximo",
+                    "sPrevious": "Anterior",
+                    "sFirst":    "Primeiro",
+                    "sLast":     "Último"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Ordenar colunas de forma ascendente",
+                    "sSortDescending": ": Ordenar colunas de forma descendente"
+                }
+            }
+        });
+    });
     </script>
   </body>
 </html>

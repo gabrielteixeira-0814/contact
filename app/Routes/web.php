@@ -36,11 +36,11 @@ webRoute('delete', '/web/users/{id}/delete', 'UserController@delete');
 /**
  * Address
  */
-// apiRoute('get', '/address/list', 'AddressController@list');
-// apiRoute('get', '/address/{id}', 'AddressController@get');
-// apiRoute('post', '/address/create', 'AddressController@store');
-// apiRoute('put', '/address/update/{id}', 'AddressController@update');
-// apiRoute('delete', '/address/{id}/delete', 'AddressController@delete');
+webRoute('get', '/web/address/list', 'AddressController@list');
+webRoute('get', '/web/address/{id}', 'AddressController@get');
+webRoute('post', '/web/address/create', 'AddressController@store');
+webRoute('put', '/web/address/update/{id}', 'AddressController@update');
+webRoute('delete', '/web/address/{id}/delete', 'AddressController@delete');
 
 /**
  * Contact

@@ -132,6 +132,20 @@ class Router
 
                             break;
 
+                            case 'AddressController':
+                                $controller = "App\\Controllers\\$controller";
+                                
+                                $addressService = new AddressService(new AddressRepository(), new ContactRepository());
+                                $controllerInstance = new $controller($addressService);
+    
+                                if (Request::method() === 'PUT' || Request::method() === 'POST') {
+                                    $controllerInstance->$action(new Request, new Response, ...$matches);
+                                } else if (Request::method() === 'GET' || Request::method() === 'DELETE') {
+                                    call_user_func_array([$controllerInstance, $action], [new Response(), ...$matches]);
+                                }
+    
+                                break;
+
                         // API
                         case 'UserController':
                             $controller = "App\\Controllers\\Api\\$controller";

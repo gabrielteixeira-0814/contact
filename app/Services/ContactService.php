@@ -43,6 +43,11 @@ class ContactService
 
             $errorInfo = json_decode($e->getMessage(), true);
 
+            if (isset($errorInfo['user_id'])) {
+                $error = $errorInfo['user_id']['user_id'];
+                return ['error' => $error];
+            }
+
             if (isset($errorInfo['name'])) {
                 $error = $errorInfo['name']['name'];
                 return ['error' => $error];

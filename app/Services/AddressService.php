@@ -43,6 +43,42 @@ class AddressService
         }
         catch (Exception $e) {
 
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            }
+
+            $errorInfo = json_decode($e->getMessage(), true);
+
+            if (isset($errorInfo['contact_id'])) {
+                $error = $errorInfo['contact_id']['contact_id'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['number'])) {
+                $error = $errorInfo['number']['number'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['public_place'])) {
+                $error = $errorInfo['public_place']['public_place'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['neighborhood'])) {
+                $error = $errorInfo['neighborhood']['neighborhood'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['city'])) {
+                $error = $errorInfo['city']['city'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['state'])) {
+                $error = $errorInfo['state']['state'];
+                return ['error' => $error];
+            }
+
             return ['error' => $e->getMessage()];
         }
     }
@@ -57,6 +93,42 @@ class AddressService
             return $this->repo->update($validatedData, $id);
         }
         catch (Exception $e) {
+
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            }
+
+            $errorInfo = json_decode($e->getMessage(), true);
+
+            if (isset($errorInfo['contact_id'])) {
+                $error = $errorInfo['contact_id']['contact_id'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['number'])) {
+                $error = $errorInfo['number']['number'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['public_place'])) {
+                $error = $errorInfo['public_place']['public_place'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['neighborhood'])) {
+                $error = $errorInfo['neighborhood']['neighborhood'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['city'])) {
+                $error = $errorInfo['city']['city'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['state'])) {
+                $error = $errorInfo['state']['state'];
+                return ['error' => $error];
+            }
 
             return ['error' => $e->getMessage()];
         }
