@@ -52,33 +52,33 @@
                         <div class="form-row">
                           <div class="form-group col-md-6">
                             <label for="inputEmail4">Name</label>
-                            <input type="text" v-model="name" class="form-control">
+                            <input type="text" v-model="contactName" class="form-control">
                           </div>
                           <div class="form-group col-md-6">
                             <label for="inputEmail">Email</label>
-                            <input type="email" v-model="email" class="form-control" id="inputEmail">
+                            <input type="email" v-model="contactEmail" class="form-control" id="inputEmail">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="inputAddress">Address</label>
-                          <input type="text" v-model="public_place" class="form-control" id="inputAddress" placeholder="Main St">
+                          <input type="text" v-model="contactPublic_place" class="form-control" id="inputAddress" placeholder="Main St">
                         </div>
                         <div class="form-group">
                           <label for="inputNeighborhood">Neighborhood</label>
-                          <input type="text" v-model="neighborhood" class="form-control" id="inputNeighborhood">
+                          <input type="text" v-model="contactNeighborhood" class="form-control" id="inputNeighborhood">
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-2">
                             <label for="inputNumber">Number</label>
-                            <input type="text" v-model="number" class="form-control" id="inputNumber">
+                            <input type="text" v-model="contactNumber" class="form-control" id="inputNumber">
                           </div>
                           <div class="form-group col-md-4">
                             <label for="inputCity">City</label>
-                            <input type="text" v-model="city" class="form-control" id="inputCity">
+                            <input type="text" v-model="contactCity" class="form-control" id="inputCity">
                           </div>
                           <div class="form-group col-md-4">
                             <label for="inputState">State</label>
-                            <select id="inputState" v-model="state" class="form-control">
+                            <select id="inputState" v-model="ContactState" class="form-control">
                               <option selected>Select</option>
                               <option value="RJ">RJ</option>
                               <option value="RS">RS</option>
@@ -149,45 +149,67 @@
             userName: '',
             email: '',
             password: '',
+
+            contactName: '',
+            contactEmail: '',
+            contactPublic_place: '',
+            contactNeighborhood: '',
+            contactNumber: '',
+            contactCity: '',
+            ContactState: '',
+
             userslist: []
           }
         },
         methods: {
           onSubmit() {
-            console.log(this.name);
-            console.log(this.email);
-            console.log(this.public_place);
-            console.log(this.neighborhood);
-            console.log(this.number);
-            console.log(this.city);
-            console.log(this.state);
+            console.log(this.contactName);
+            console.log(this.contactEmail);
+            console.log(this.contactPublic_place);
+            console.log(this.contactNeighborhood);
+            console.log(this.contactNumber);
+            console.log(this.contactCity);
+            console.log(this.ContactState);
 
-            if (this.name !== '' && this.email && this.public_place && this.neighborhood && this.number && this.city && this.state) {
+            if (this.contactName !== '' &&
+                this.contactEmail !== '' &&
+                this.contactPublic_place !== '' &&
+                this.contactNeighborhood !== '' &&
+                this.contactNumber !== '' &&
+                this.contactCity !== '' &&
+                this.ContactState
+              ) {
               var fd = new FormData()
 
               const data = {
-                name: this.name,
-                email: this.email,
-                public_place: this.public_place,
-                neighborhood: this.neighborhood,
-                number: this.number,
-                city: this.city,
-                state: this.state
+                name: this.contactName,
+                email: this.contactEmail,
+                public_place: this.contactPublic_place,
+                neighborhood: this.contactNeighborhood,
+                number: this.contactNumber,
+                city: this.contactCity,
+                state: this.ContactState
               };
 
-              axios.post('/contact/web/users/create', data)
+              axios.post('/contact/web/contact/create', data)
                 .then(res => {
                   if (res.data.success) {
-                    alert('User created successfully');
+                    console.log(res);
+                    //alert('Contact created successfully');
                   }                
                 })
                 .catch(err => {
-                  alert(err.response.data.message);
+                  console.log(err);
+                  //alert(err.response.data.message);
                 });
             }
           },
           createUser() {
-            if (this.userName !== '' && this.email !== '' && this.password !== '' && this.password_confirmation !== '') {
+            if (this.userName !== '' &&
+                this.email !== '' &&
+                this.password !== '' &&
+                this.password_confirmation !== ''
+              ) {
               var fd = new FormData()
 
               const data = {

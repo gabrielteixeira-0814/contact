@@ -1,12 +1,13 @@
-<?php 
+<?php
 
-namespace App\Controllers\Api;
+namespace App\Controllers;
 
+use App\Utils\RenderView;
 use App\Services\ContactService;
 use Src\Request;
 use Src\Response;
 
-class ContactController
+class ContactController extends RenderView
 {
     private $contactService;
 
@@ -21,7 +22,6 @@ class ContactController
      */
     public function list(Response $response)
     {
-        echo 'olaww';
         $contactService = $this->contactService->list();
         
         if (isset($contactService['error'])) {
@@ -72,6 +72,12 @@ class ContactController
      */
     public function store(Request $request, Response $response)
     {
+        return $response::json([
+            'error'   => false,
+            'success' => true,
+            'data'    => $request::body()
+        ], 201);
+        
         if (!$body = $request::body()) {
 
             return $response::json([
@@ -92,7 +98,7 @@ class ContactController
             ], 400);
         }
 
-        $response::json([
+        return $response::json([
             'error'   => false,
             'success' => true,
             'data'    => $contactService

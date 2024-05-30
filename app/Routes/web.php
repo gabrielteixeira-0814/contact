@@ -45,8 +45,8 @@ webRoute('delete', '/web/users/{id}/delete', 'UserController@delete');
 /**
  * Contact
  */
-// apiRoute('get', '/contact/list', 'ContactController@list');
-// apiRoute('get', '/contact/{id}', 'ContactController@get');
-// apiRoute('post', '/contact/create', 'ContactController@store');
-// apiRoute('put', '/contact/update/{id}', 'ContactController@update');
-// apiRoute('delete', '/contact/{id}/delete', 'ContactController@delete');
+webRoute('get', '/web/contact/list', 'ContactController@list');
+webRoute('get', '/web/contact/{id}', 'ContactController@get');
+webRoute('post', '/web/contact/create', 'ContactController@store');
+webRoute('put', '/web/contact/update/{id}', 'ContactController@update');
+webRoute('delete', '/web/contact/{id}/delete', 'ContactController@delete');
