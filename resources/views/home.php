@@ -13,231 +13,219 @@
   </head>
   <body class="">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" id="app">
             <div class="col-md-3 bg-white rounded  shadow-lg p-5">
-            <h1>Hello, world!</h1>
-                <div class="mt-5">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Usuário +</button>
-                </div>
-              
-                <div class="mt-3">
-                    <form>
-                        <div class="form-group">
-                            <label for="exampleFormControlSelect1">Usuários</label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="mt-4">
-                    <a class="button-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
-                        <span>:=</span>
-                        <span>Contatos</span>
-                    </a>
-                </div>
-                <div class="mt-4">
-                    <a class="button-list-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
-                        <span>:=</span>
-                        <span>Lista de Contatos</span>
-                    </a>
-                </div>
+              <h1>Welcome</h1>
+              <div class="mt-5">
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">Usuário +</button>
+              </div>
+              <div class="mt-3">
+                  <form>
+                      <div class="form-group">
+                          <label for="selectUsers">Usuários</label>
+                          <select class="form-control" id="selectUsers">
+                            <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
+                          </select>
+                      </div>
+                  </form>
+              </div>
+              <div class="mt-4">
+                  <a class="button-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
+                      <span>:=</span>
+                      <span>Contatos</span>
+                  </a>
+              </div>
+              <div class="mt-4">
+                  <a class="button-list-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
+                      <span>:=</span>
+                      <span>Lista de Contatos</span>
+                  </a>
+              </div>
             </div>
-            <div class="col-md-9" id="app">
+            <div class="col-md-9">
               <div class="row justify-content-center mt-5">
                 <div class="col-md-8 bg-white rounded  shadow-lg p-5">
-                  <h2>Agenda de Contatos - Criar Contato</h2>
+                  <h2>Create Contact</h2>
 
                   <div class="border rounded p-3 mt-5">
-                    <form @submit.prevent="onSubmit" >
-                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="inputEmail4">Nome</label>
-                          <input type="text" v-model="name" class="form-control">
+                    <form @submit.prevent="onSubmit">
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail4">Name</label>
+                            <input type="text" v-model="name" class="form-control">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail">Email</label>
+                            <input type="email" v-model="email" class="form-control" id="inputEmail">
+                          </div>
                         </div>
-                        <!-- <div class="form-group col-md-6">
-                          <label for="inputEmail4">Email</label>
-                          <input type="email" v-model="name" class="form-control" id="inputEmail4">
-                        </div> -->
-                        <!-- <div class="form-group col-md-6">
-                          <label for="inputPassword4">Password</label>
-                          <input type="password" class="form-control" id="inputPassword4">
+                        <div class="form-group">
+                          <label for="inputAddress">Address</label>
+                          <input type="text" v-model="public_place" class="form-control" id="inputAddress" placeholder="Main St">
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="inputAddress">Address</label>
-                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-                      </div>
-                      <div class="form-group">
-                        <label for="inputAddress2">Address 2</label>
-                        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                      </div>
-                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="inputCity">City</label>
-                          <input type="text" class="form-control" id="inputCity">
+                        <div class="form-group">
+                          <label for="inputNeighborhood">Neighborhood</label>
+                          <input type="text" v-model="neighborhood" class="form-control" id="inputNeighborhood">
                         </div>
-                        <div class="form-group col-md-4">
-                          <label for="inputState">State</label>
-                          <select id="inputState" class="form-control">
-                            <option selected>Choose...</option>
-                            <option>...</option>
-                          </select>
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label for="inputNumber">Number</label>
+                            <input type="text" v-model="number" class="form-control" id="inputNumber">
+                          </div>
+                          <div class="form-group col-md-4">
+                            <label for="inputCity">City</label>
+                            <input type="text" v-model="city" class="form-control" id="inputCity">
+                          </div>
+                          <div class="form-group col-md-4">
+                            <label for="inputState">State</label>
+                            <select id="inputState" v-model="state" class="form-control">
+                              <option selected>Select</option>
+                              <option value="RJ">RJ</option>
+                              <option value="RS">RS</option>
+                              <option value="MG">MG</option>
+                              <option value="SP">SP</option>
+                            </select>
+                          </div>
                         </div>
-                        <div class="form-group col-md-2">
-                          <label for="inputZip">Zip</label>
-                          <input type="text" class="form-control" id="inputZip">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="gridCheck">
-                          <label class="form-check-label" for="gridCheck">
-                            Check me out
-                          </label>
-                        </div>
-                      </div> -->
-                      <button class="btn btn-primary">Salvar</button>
+                      <button class="btn btn-primary">Save</button>
                     </form>
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="row justify-content-center my-5">
-                <div class="col-md-8 bg-white rounded  shadow-lg p-5">
-                  <h2>Agenda de Contatos - Lista de Contatos</h2>
-
-                  <div class="border rounded p-3 mt-5">
-                    <form>
-                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="inputEmail4">Email</label>
-                          <input type="email" class="form-control" id="inputEmail4">
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label for="inputPassword4">Password</label>
-                          <input type="password" class="form-control" id="inputPassword4">
-                        </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="userModalLabel">Criar usuário</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form @submit.prevent="createUser">
+                      <div class="form-group">
+                          <label for="name">Nome</label>
+                          <input type="email" class="form-control" v-model="userName">
                       </div>
                       <div class="form-group">
-                        <label for="inputAddress">Address</label>
-                        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                          <label for="email">E-mail</label>
+                          <input type="email" class="form-control" v-model="email">
                       </div>
                       <div class="form-group">
-                        <label for="inputAddress2">Address 2</label>
-                        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-                      </div>
-                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label for="inputCity">City</label>
-                          <input type="text" class="form-control" id="inputCity">
-                        </div>
-                        <div class="form-group col-md-4">
-                          <label for="inputState">State</label>
-                          <select id="inputState" class="form-control">
-                            <option selected>Choose...</option>
-                            <option>...</option>
-                          </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                          <label for="inputZip">Zip</label>
-                          <input type="text" class="form-control" id="inputZip">
-                        </div>
+                          <label for="password">Senha</label>
+                          <input type="password" class="form-control" v-model="password">
                       </div>
                       <div class="form-group">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="gridCheck">
-                          <label class="form-check-label" for="gridCheck">
-                            Check me out
-                          </label>
-                        </div>
+                          <label for="password_confirmation">Confirma senha</label>
+                          <input type="password" class="form-control" v-model="password_confirmation">
                       </div>
-                      <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
                   </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" @click="createUser()">Salvar</button>
+                  </div>
                 </div>
-              </div> -->
+              </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Criar usuário</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          </div>
       </div>
-      <div class="modal-body">
-      <form>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        <button type="button" class="btn btn-primary">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-  <!-- Optional JavaScript; choose one of the two! -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-<!-- Inicialização do Vue no final do corpo -->
-<script>
-  const { createApp } = Vue;
+    <script>
+      const { createApp } = Vue;
 
-  createApp({
-    data() {
-      return {
-        name: ''
-      }
-    },
-    methods: {
-      onSubmit() {
-       if (this.name !== '') {
-        var fd = new FormData()
+      createApp({
+        data() {
+          return {
+            name: '',
+            userName: '',
+            email: '',
+            password: '',
+            userslist: []
+          }
+        },
+        methods: {
+          onSubmit() {
+            console.log(this.name);
+            console.log(this.email);
+            console.log(this.public_place);
+            console.log(this.neighborhood);
+            console.log(this.number);
+            console.log(this.city);
+            console.log(this.state);
 
-        fd.append('name', this.name);
+            if (this.name !== '' && this.email && this.public_place && this.neighborhood && this.number && this.city && this.state) {
+              var fd = new FormData()
 
-        axios({
-          url: '/contact/web/users',
-          method: 'get',
-          data: fd
-        })
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err => {
-          console.log(err);
-        })
-       }
-      }
-    }
-  }).mount('#app');
+              const data = {
+                name: this.name,
+                email: this.email,
+                public_place: this.public_place,
+                neighborhood: this.neighborhood,
+                number: this.number,
+                city: this.city,
+                state: this.state
+              };
 
-</script>
+              axios.post('/contact/web/users/create', data)
+                .then(res => {
+                  if (res.data.success) {
+                    alert('User created successfully');
+                  }                
+                })
+                .catch(err => {
+                  alert(err.response.data.message);
+                });
+            }
+          },
+          createUser() {
+            if (this.userName !== '' && this.email !== '' && this.password !== '' && this.password_confirmation !== '') {
+              var fd = new FormData()
 
+              const data = {
+                name: this.userName,
+                email: this.email,
+                password: this.password,
+                password_confirmation: this.password_confirmation
+              };
+
+              axios.post('/contact/web/users/create', data)
+                .then(res => {
+                  if (res.data.success) {
+                    alert('User created successfully');
+                  }                
+                })
+                .catch(err => {
+                  alert(err.response.data.message);
+                });
+            }
+          },
+          getUsers() {
+            axios.get('/contact/web/users')
+              .then(res => {
+                if (res.data.success) {
+                  this.userslist = res.data.data;
+                  console.log(res.data.data);
+                }                
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
+        },
+        mounted() {
+          this.getUsers();
+        }
+      }).mount('#app');
+
+    </script>
   </body>
 </html>

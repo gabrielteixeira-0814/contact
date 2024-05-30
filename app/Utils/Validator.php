@@ -37,13 +37,13 @@ class Validator
                     'email' => v::email()
                         ->setName('E-mail')
                         ->setTemplate('{{name}} must be a valid email address'),
-                    'password' => v::stringType()->length(8, null)
+                    'password' => v::stringType()->length(5, null)
                         ->setName('Password')
-                        ->setTemplate('{{name}} must be at least 8 characters long')
-                        ->regex('/[A-Z]/', '{{name}} must contain at least one upper case letter.')
-                        ->regex('/[a-z]/', '{{name}} must contain at least one lowercase letter')
-                        ->regex('/[0-9]/', '{{name}} must contain at least one number')
-                        ->regex('/[\W]/', '{{name}} must contain at least one special character'),
+                        ->setTemplate('{{name}} must be at least 5 characters long')
+                        // ->regex('/[A-Z]/', '{{name}} must contain at least one upper case letter.')
+                        // ->regex('/[a-z]/', '{{name}} must contain at least one lowercase letter')
+                        ->regex('/[0-9]/', '{{name}} must contain at least one number'),
+                        // ->regex('/[\W]/', '{{name}} must contain at least one special character'),
                     'password_confirmation' => v::equals($data['password'] ?? null)
                         ->setName('Password Confirmation')
                         ->setTemplate('Password confirmation must match the password')
