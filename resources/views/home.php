@@ -5,11 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-   <!-- Bootstrap CSS -->
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <link href="public/assets/css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 
     <title>Contatos</title>
   </head>
@@ -24,7 +26,7 @@
               <div class="mt-3">
                   <form>
                       <div class="form-group">
-                          <label for="selectUsers">Users</label>
+                          <label for="selectUsers" class="font-weight-bold">Users</label>
                           <select class="form-control" v-model="selectedUser" @change="getUserContacts(selectedUser)">
                             <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
                           </select>
@@ -102,49 +104,40 @@
                 </div>
                 <div class="col-md-8 bg-white rounded  shadow-lg p-5 my-5">
                   <h2>Lista Contacts</h2>
-                  <div class="border rounded p-3 mt-5">
-                    <div>
-                      <p v-for="contact in contactList" :key="contact.id" :value="contact.id">{{ contact.name }} - {{ contact.email }}</p>
-                    </div>
-                    <div>
-                    <table id="example" class="table table-striped table-bordered" style="width:100%">
-                      <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Ações</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        <!-- @foreach ($users as $user) -->
-                        <tr>
-                          <th scope="row">ola</th>
-
-                            <!-- <th scope="row">{{ $user->id ?? '-' }}</th>
-                            <td>{{ $user->name ?? '-' }}</td>
-                            <td>{{ $user->email ?? '-' }}</td>
-                            <td>{{ $user->usersType->name ?? '-' }}</td>
-                            <td>{{ $user->is_enabled ? 'Ativo' :  'Inativo' }}</td>
-                            <td>
-                                <a href='{{route('user.show',$user->id)}}' class='btn btn-secondary btn-sm'><i class="bi bi-eye-fill"></i></a>
-                                <a href='{{route('user.edit',$user->id)}}' class='btn btn-success btn-sm'><i class="bi bi-pencil"></i></a>
-                                <a href="{{route('delete_user',$user->id)}}" class='btn btn-danger btn-sm'><i class="bi bi-trash-fill"></i></a>
-                            </td> -->
+                    <div class="my-5">
+                        <table id="example" class="table table-striped table-bordered text-center" style="width:100%">
+                          <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">E-mail</th>
+                            <th scope="col">Ações</th>
                           </tr>
-                        <!-- @endforeach -->
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                        <tr v-for="contact in contactList" :key="contact.id" :value="contact.id">
+                          <th scope="row">{{ contact.id }}</th>
+                          <td>{{ contact.name }}</td>
+                          <td>{{ contact.email }}</td>
+                            <td>
+                                <a href="#" class='btn btn-secondary btn-sm mr-1'><i class="fa fa-phone-square" style="font-size: 13px;"></i></a>
+                                <a href="#" class='btn btn-primary btn-sm mr-1' data-toggle="modal" data-target="#phoneModal"><i class="fa fa-phone" style="font-size: 13px;" ></i></a>
+                                <a href="#" class='btn btn-success btn-sm mr-1' data-toggle="modal" data-target="#editContactModal" @click="getContact(contact.id)">
+                                  <i class="fa fa-align-justify" style="font-size: 13px;"></i>
+                                </a>
+                                <a href="#" class='btn btn-danger btn-sm' @click="deleteContact(contact.id, userIdReloadTable)"><i class="fa fa-trash" style="font-size: 13px;"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
                 </div>
 
 
               </div>
             </div>
-            <!-- Modal -->
+
+            <!-- Modal User -->
             <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -182,6 +175,92 @@
               </div>
             </div>
 
+            <!-- Modal Edit Contact -->
+            <div class="modal fade" id="editContactModal" tabindex="-1" aria-labelledby="editContactLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editContactLabel">Edit Contact</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                  <form @submit.prevent="updateContact">
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail4">Name</label>
+                            <input type="text" v-model="editContactName" class="form-control">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="inputEmail">Email</label>
+                            <input type="email" v-model="editContactEmail" class="form-control" id="inputEmail">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="inputAddress">Address</label>
+                          <input type="text" v-model="editContactPublic_place" class="form-control" id="inputAddress" placeholder="Main St">
+                        </div>
+                        <div class="form-group">
+                          <label for="inputNeighborhood">Neighborhood</label>
+                          <input type="text" v-model="editContactNeighborhood" class="form-control" id="inputNeighborhood">
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-2">
+                            <label for="inputNumber">Number</label>
+                            <input type="text" v-model="editContactNumber" class="form-control" id="inputNumber">
+                          </div>
+                          <div class="form-group col-md-4">
+                            <label for="inputCity">City</label>
+                            <input type="text" v-model="editContactCity" class="form-control" id="inputCity">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="inputState">State</label>
+                            <select id="inputState" v-model="editContactState" class="form-control">
+                              <option selected>Select</option>
+                              <option value="RJ">RJ</option>
+                              <option value="RS">RS</option>
+                              <option value="MG">MG</option>
+                              <option value="SP">SP</option>
+                            </select>
+                          </div>
+                        </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="updateContact(editContactId, editAddressId)">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal Phone -->
+            <div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="phoneModalLabel">Create Phone</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span> 
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form @submit.prevent="createPhones">
+                      <div class="form-group">
+                          <label for="number">Number</label>
+                          <input type="text" class="form-control" v-model="number">
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="createPhones()">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
              <!-- gif -->
             <div v-if="isLoading" class="loading">
               <div class="c-loader"></div>
@@ -190,15 +269,18 @@
           </div>
       </div>
 
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese.json"></script>
+
+    <script>
+        new DataTable('#example');
+    </script>
 
     <script>
       const { createApp } = Vue;
@@ -208,6 +290,7 @@
           return {
             selectedUser: '',
             userNameTitle: '',
+            userIdReloadTable: '',
 
             // Input User
             name: '',
@@ -225,6 +308,19 @@
             contactNumber: '',
             contactCity: '',
             ContactState: '',
+
+            // Edit Contact
+            editContactId: '',
+            editContactName: '',
+            editContactEmail: '',
+
+            // Edit Address
+            editAddressId: '',
+            editContactPublic_place: '',
+            editContactNeighborhood: '',
+            editContactNumber: '',
+            editContactCity: '',
+            editContactState: '',
 
             userslist: [],
             contactList: [],
@@ -244,15 +340,13 @@
                   email: this.contactEmail
                 };
 
-                console.log(data);
-
                 try {
                   const res = await axios.post('/contact/web/contact/create', data);
 
                   if (res.data.success) {
                     if (res.data.data.id) {
 
-                      this.createAddress(res.data.data.id)
+                      this.updateAddress(res.data.data.id)
                         .then(result => {
                           if (result) {
                             console.log("The address was created successfully");
@@ -279,6 +373,70 @@
             } else {
               this.isLoading = false;
               alert('Sorry, please check that all data has been filled in');
+            }
+          },
+          async getContact(contactId) {
+              try {
+                  const res = await axios.get(`/contact/web/contact/${contactId}`); 
+
+                  if (res.data.success) {
+
+                    // Input Contact
+                    this.editContactId= res.data.message.id;
+                    this.editContactName= res.data.message.name;
+                    this.editContactEmail= res.data.message.email;
+
+                    this.editAddressId= res.data.message.address.id;
+                    this.editContactPublic_place= res.data.message.address.public_place;
+                    this.editContactNeighborhood= res.data.message.address.neighborhood;
+                    this.editContactNumber= res.data.message.address.number;
+                    this.editContactCity= res.data.message.address.city;
+                    this.editContactState= res.data.message.address.state;
+
+                    // console.log(res.data.message);
+                  } 
+              } catch (err) {
+                  console.log(err);
+              }
+          },
+          async updateContact(contactId, addressId) {
+            console.log(contactId, 'contactIdaaa', addressId);
+
+            if (contactId !== '' && this.editContactName !== '' && this.editContactEmail !== '') {
+                const data = {
+                  user_id: contactId,
+                  name: this.editContactName,
+                  email: this.editContactEmail
+                };
+
+                try {
+                  const res = await axios.put(`/contact/web/contact/update/${contactId}`, data);
+
+                  if (res.data.success) {
+                    if (res.data.message.id) {
+
+                      console.log(res.data.message.id);
+
+                      this.updateAddress(contactId, addressId)
+                        .then(result => {
+                          if (result) {
+                            console.log("The address was edit successfully");
+                          } else {
+                            console.log("Unable to edit address");
+                          }
+
+                        })
+                        .catch(error => {
+                          console.log("Erro ao executar a promise:", error);
+                        });
+                    }
+
+                    alert('Contact edit successfully');
+                  }
+                } catch (err) {
+
+                  alert(err);
+                }
             }
           },
           createUser() {
@@ -317,12 +475,25 @@
               .then(res => {
                 if (res.data.success) {
                   this.userslist = res.data.data;
-                  console.log(res.data.data);
+                  // console.log(res.data.data);
                 }                
               })
               .catch(err => {
                 console.log(err);
               });
+          },
+          async getUserContacts(userId) {
+              try {
+                  const res = await axios.get(`/contact/web/users/${userId}`); 
+
+                  if (res.data.success) {
+                    this.userIdReloadTable = res.data.message.id;
+                    this.userNameTitle = res.data.message.name;
+                    this.contactList = res.data.message.contacts;
+                  } 
+              } catch (err) {
+                  console.log(err.data.message);
+              }
           },
           async createAddress(contactId) {
             
@@ -362,68 +533,103 @@
               }
             }
           },
+          async updateAddress(contactId, addressId) {
+            if (this.editContactPublic_place !== '' &&
+                this.editContactNeighborhood !== '' &&
+                this.editContactNumber !== '' &&
+                this.editContactCity !== '' &&
+                this.editContactState
+              ) { 
 
-          async getUserContacts(userId) {
-              console.log(userId, 'ola aqui');
+              const data = {
+                contact_id: contactId,
+                number: this.editContactNumber,
+                public_place: this.editContactPublic_place,
+                neighborhood: this.editContactNeighborhood,
+                city: this.editContactCity,
+                state: this.editContactState
+              };
+
               try {
-                  const res = await axios.get(`/contact/web/users/${userId}`); 
+                  const res = await axios.put(`/contact/web/address/update/${addressId}`, data);
 
                   if (res.data.success) {
-                    this.userNameTitle = res.data.message.name;
-                    this.contactList = res.data.message.contacts;
-                    console.log(res.data.message.name);
-                    console.log(res.data.message.contacts);
+                    console.log('Adrress edit successfully');
+
+                    return true;
+                  }
+              } catch (err) {
+                console.log(err);
+
+                return false;
+              }
+            }
+          },
+          async deleteContact(contactId, userIdReloadTable) {
+
+            if (window.confirm('Delete this contact')) {
+              console.log(contactId);
+              try {
+                  const res = await axios.delete(`/contact/web/contact/${contactId}/delete`); 
+
+                  if (res.data.success) {
+                    // console.log(res.data.message);
+                    this.getUserContacts(userIdReloadTable);
+                    alert(res.data.message);
                   } 
               } catch (err) {
-                  console.log(err.data.message);
+                  // console.log(err.response.data.message);
+                  alert(err.response.data.message);
               }
-          }
+            }
+          },
+          async createPhones(contactId) {
+            
+            if (this.contactPublic_place !== '' &&
+                this.contactNeighborhood !== '' &&
+                this.contactNumber !== '' &&
+                this.contactCity !== '' &&
+                this.ContactState
+              ) { 
+
+              const data = {
+                contact_id: contactId,
+                number: this.contactNumber,
+                public_place: this.contactPublic_place,
+                neighborhood: this.contactNeighborhood,
+                city: this.contactCity,
+                state: this.ContactState
+              };
+
+              try {
+                  const res = await axios.post('/contact/web/address/create', data);
+
+                  if (res.data.success) {
+                    console.log('Adrress created successfully');
+                    this.contactNumber = '';
+                    this.contactPublic_place = '';
+                    this.contactNeighborhood = '';
+                    this.contactCity = '';
+                    this.ContactState = '';
+
+                    return true;
+                  }
+              } catch (err) {
+                console.log(err.response.data.message);
+
+                return false;
+              }
+            }
+          },
         },
         watch: {
           selectedUser(newVal) {
-            console.log('User selected:', newVal);
           }
         },
         mounted() {
           this.getUsers();
         }
       }).mount('#app');
-
-      $(document).ready(function() {
-        $('#example').DataTable({
-            "columnDefs": [
-                { "width": "3%", "targets": 0, "className": "dt-center"  }, // Defina a largura da primeira coluna
-                { "width": "30%", "targets": 1, "className": "dt-center"  },
-                { "width": "35%", "targets": 2 },
-                { "width": "12%", "targets": 3, "className": "dt-center"  },
-                { "width": "10%", "targets": 4, "className": "dt-center"  },
-                // Adicione mais definições de largura conforme necessário para outras colunas
-            ],
-            "language": {
-                "sEmptyTable":     "Nenhum dado encontrado na tabela",
-                "sInfo":           "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                "sInfoEmpty":      "Mostrando 0 até 0 de 0 registros",
-                "sInfoFiltered":   "(Filtrados de _MAX_ registros)",
-                "sInfoPostFix":    "",
-                "sInfoThousands":  ".",
-                "sLengthMenu":     "Mostrar _MENU_ resultados por página",
-                "sLoadingRecords": "Carregando...",
-                "sProcessing":     "Processando...",
-                "sZeroRecords":    "Nenhum registro encontrado",
-                "sSearch":         "Pesquisar",
-                "oPaginate": {
-                    "sNext":     "Próximo",
-                    "sPrevious": "Anterior",
-                    "sFirst":    "Primeiro",
-                    "sLast":     "Último"
-                },
-                "oAria": {
-                    "sSortAscending":  ": Ordenar colunas de forma ascendente",
-                    "sSortDescending": ": Ordenar colunas de forma descendente"
-                }
-            }
-        });
-    });
     </script>
   </body>
 </html>
