@@ -72,12 +72,6 @@ class ContactController extends RenderView
      */
     public function store(Request $request, Response $response)
     {
-        return $response::json([
-            'error'   => false,
-            'success' => true,
-            'data'    => $request::body()
-        ], 201);
-        
         if (!$body = $request::body()) {
 
             return $response::json([

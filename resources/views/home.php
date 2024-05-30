@@ -23,7 +23,7 @@
                   <form>
                       <div class="form-group">
                           <label for="selectUsers">Usuários</label>
-                          <select class="form-control" id="selectUsers">
+                          <select class="form-control" v-model="selectedUser">
                             <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
                           </select>
                       </div>
@@ -46,7 +46,6 @@
               <div class="row justify-content-center mt-5">
                 <div class="col-md-8 bg-white rounded  shadow-lg p-5">
                   <h2>Create Contact</h2>
-
                   <div class="border rounded p-3 mt-5">
                     <form @submit.prevent="onSubmit">
                         <div class="form-row">
@@ -130,6 +129,12 @@
                 </div>
               </div>
             </div>
+
+             <!-- gif -->
+            <div v-if="isLoading" class="loading">
+              <div class="c-loader"></div>
+            </div>
+
           </div>
       </div>
 
@@ -145,63 +150,58 @@
       createApp({
         data() {
           return {
+            selectedUser: '',
+
+            // Input User
             name: '',
             userName: '',
             email: '',
             password: '',
 
+            // Input Contact
             contactName: '',
             contactEmail: '',
+
+            // Input Address
             contactPublic_place: '',
             contactNeighborhood: '',
             contactNumber: '',
             contactCity: '',
             ContactState: '',
 
-            userslist: []
+            userslist: [],
+
+            isLoading: false
           }
         },
         methods: {
-          onSubmit() {
-            console.log(this.contactName);
-            console.log(this.contactEmail);
-            console.log(this.contactPublic_place);
-            console.log(this.contactNeighborhood);
-            console.log(this.contactNumber);
-            console.log(this.contactCity);
-            console.log(this.ContactState);
+          
+          async onSubmit() {
+            this.isLoading = true;
 
-            if (this.contactName !== '' &&
-                this.contactEmail !== '' &&
-                this.contactPublic_place !== '' &&
-                this.contactNeighborhood !== '' &&
-                this.contactNumber !== '' &&
-                this.contactCity !== '' &&
-                this.ContactState
-              ) {
-              var fd = new FormData()
+            if (this.contactName !== '' && this.contactEmail !== '' && this.selectedUser !== '') {
+                const data = {
+                  user_id: this.selectedUser,
+                  name: this.contactName,
+                  email: this.contactEmail
+                };
 
-              const data = {
-                name: this.contactName,
-                email: this.contactEmail,
-                public_place: this.contactPublic_place,
-                neighborhood: this.contactNeighborhood,
-                number: this.contactNumber,
-                city: this.contactCity,
-                state: this.ContactState
-              };
+                try {
+                  const res = await axios.post('/contact/web/contact/create', data);
 
-              axios.post('/contact/web/contact/create', data)
-                .then(res => {
                   if (res.data.success) {
-                    console.log(res);
-                    //alert('Contact created successfully');
-                  }                
-                })
-                .catch(err => {
-                  console.log(err);
-                  //alert(err.response.data.message);
-                });
+                    this.createAddress(res.data.data.id);
+                    
+                    this.isLoading = false;
+                    alert('Contact created successfully');
+                  }
+                } catch (err) {
+                  this.isLoading = false;
+                  alert(err.response.data.message);
+                }
+            } else {
+              this.isLoading = false;
+              alert('Sorry, please check that all data has been filled in');
             }
           },
           createUser() {
@@ -241,6 +241,43 @@
               .catch(err => {
                 console.log(err);
               });
+          },
+          async createAddress(contactId) {
+            
+            if (this.contactPublic_place !== '' &&
+                this.contactNeighborhood !== '' &&
+                this.contactNumber !== '' &&
+                this.contactCity !== '' &&
+                this.ContactState
+              ) { 
+
+              const data = {
+                public_place: this.contactPublic_place,
+                neighborhood: this.contactNeighborhood,
+                number: this.contactNumber,
+                city: this.contactCity,
+                state: this.ContactState
+              };
+
+              try {
+                  const res = await axios.post('/contact/web/contact/create', data);
+
+                  console.log(err);
+                  if (res.data.success) {
+                  
+                  }
+              } catch (err) {
+                console.log(err);
+              }
+
+            }
+            
+          },
+        },
+        watch: {
+          selectedUser(newVal) {
+            console.log('User selected:', newVal);
+            // Aqui você pode adicionar qualquer lógica adicional que precisar ao alterar o valor selecionado
           }
         },
         mounted() {

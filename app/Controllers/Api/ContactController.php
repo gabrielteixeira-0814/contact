@@ -21,7 +21,6 @@ class ContactController
      */
     public function list(Response $response)
     {
-        echo 'olaww';
         $contactService = $this->contactService->list();
         
         if (isset($contactService['error'])) {
