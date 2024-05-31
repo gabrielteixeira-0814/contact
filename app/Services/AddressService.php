@@ -12,6 +12,7 @@ use Exception;
 class AddressService
 {
     private $repo;
+    private $contactRepo;
 
     public function __construct(AddressRepositoryInterface $repo, ContactRepositoryInterface $contactRepo)
     {
