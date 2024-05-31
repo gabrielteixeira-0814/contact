@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+require "bootstrap.php";
+
 use App\Repositories\AddressRepositoryInterface;
 use App\Repositories\ContactRepositoryInterface;
 use App\Utils\Validator;
@@ -39,56 +41,103 @@ class AddressService
             $validatedData = Validator::validate($data, $rules);
 
             return $this->repo->store($validatedData);
-        } catch (Exception $e) {
-            return $this->handleException($e);
+        }
+        catch (Exception $e) {
+
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database'];
+                if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, no contact has been linked to this address'];
+            }
+
+            $errorInfo = json_decode($e->getMessage(), true);
+
+            if (isset($errorInfo['contact_id'])) {
+                $error = $errorInfo['contact_id']['contact_id'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['number'])) {
+                $error = $errorInfo['number']['number'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['public_place'])) {
+                $error = $errorInfo['public_place']['public_place'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['neighborhood'])) {
+                $error = $errorInfo['neighborhood']['neighborhood'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['city'])) {
+                $error = $errorInfo['city']['city'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['state'])) {
+                $error = $errorInfo['state']['state'];
+                return ['error' => $error];
+            }
+
+            return ['error' => $e->getMessage()];
         }
     }
 
     public function update(array $data, $id)
     {
         try {
+            $rules = Validator::rules($data);
             $rules = Validator::rules($data, 'address');
             $validatedData = Validator::validate($data, $rules);
 
             return $this->repo->update($validatedData, $id);
-        } catch (Exception $e) {
-            return $this->handleException($e);
+        }
+        catch (Exception $e) {
+
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            }
+
+            $errorInfo = json_decode($e->getMessage(), true);
+
+            if (isset($errorInfo['contact_id'])) {
+                $error = $errorInfo['contact_id']['contact_id'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['number'])) {
+                $error = $errorInfo['number']['number'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['public_place'])) {
+                $error = $errorInfo['public_place']['public_place'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['neighborhood'])) {
+                $error = $errorInfo['neighborhood']['neighborhood'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['city'])) {
+                $error = $errorInfo['city']['city'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['state'])) {
+                $error = $errorInfo['state']['state'];
+                return ['error' => $error];
+            }
+
+            return ['error' => $e->getMessage()];
         }
     }
 
     public function delete($id)
     {
         return $this->repo->delete($id);
-    }
-
-    private function handleException(Exception $e)
-    {
-        if (isset($e->errorInfo[0])) {
-            if ($e->errorInfo[0] === '08006') {
-                return ['error' => 'Sorry, we could not connect to the database'];
-            }
-            if ($e->errorInfo[0] === '23000') {
-                return ['error' => 'Sorry, no contact has been linked to this address'];
-            }
-        }
-
-        $errorInfo = json_decode($e->getMessage(), true);
-
-        $errorMessages = [
-            'contact_id' => 'contact_id',
-            'number' => 'number',
-            'public_place' => 'public_place',
-            'neighborhood' => 'neighborhood',
-            'city' => 'city',
-            'state' => 'state'
-        ];
-
-        foreach ($errorMessages as $key => $value) {
-            if (isset($errorInfo[$key])) {
-                return ['error' => $errorInfo[$key][$value]];
-            }
-        }
-
-        return ['error' => $e->getMessage()];
     }
 }

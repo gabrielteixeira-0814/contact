@@ -220,6 +220,6 @@ class Router
         }
 
         error_log("No route matched. Returning 404.");
-        Response::json(['error' => 'Route not foundaaa'], 404);
+        Response::json(['error' => 'Route not found'], 404);
     }
 }

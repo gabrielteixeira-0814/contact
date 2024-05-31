@@ -40,7 +40,7 @@
               </div>
             <div class="col-md-9">
               <div class="row justify-content-center mt-5">
-                <div class="col-md-8 bg-white rounded  shadow-lg p-5">
+                <div class="col-md-10 bg-white rounded  shadow-lg p-5">
                   <div class="row align-items-center justify-content-between px-3">
                     <div>
                       <h2>Create Contact</h2>
@@ -94,7 +94,7 @@
                     </form>
                   </div>
                 </div>
-                <div class="col-md-8 bg-white rounded  shadow-lg p-5 my-5">
+                <div class="col-md-10 bg-white rounded  shadow-lg p-5 my-5">
                   <h2>Lista Contacts</h2>
                     <div class="my-5">
                         <table id="example" class="table table-striped table-bordered text-center" style="width:100%">
