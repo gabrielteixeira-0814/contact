@@ -24,14 +24,6 @@ webRoute('post', '/web/users/create', 'UserController@store');
 webRoute('put', '/web/users/update/{id}', 'UserController@update');
 webRoute('delete', '/web/users/{id}/delete', 'UserController@delete');
 
-/**
- * Phones
- */
-// apiRoute('get', '/phones/list', 'PhoneController@list');
-// apiRoute('get', '/phones/{id}', 'PhoneController@get');
-// apiRoute('post', '/phones/create', 'PhoneController@store');
-// apiRoute('put', '/phones/update/{id}', 'PhoneController@update');
-// apiRoute('delete', '/phones/{id}/delete', 'PhoneController@delete');
 
 /**
  * Address
@@ -50,3 +42,12 @@ webRoute('get', '/web/contact/{id}', 'ContactController@get');
 webRoute('post', '/web/contact/create', 'ContactController@store');
 webRoute('put', '/web/contact/update/{id}', 'ContactController@update');
 webRoute('delete', '/web/contact/{id}/delete', 'ContactController@delete');
+
+/**
+ * Phones
+ */
+webRoute('get', '/web/phones/list', 'PhoneController@list');
+webRoute('get', '/web/phones/{id}', 'PhoneController@get');
+webRoute('post', '/web/phones/create', 'PhoneController@store');
+webRoute('put', '/web/phones/update/{id}', 'PhoneController@update');
+webRoute('delete', '/web/phones/{id}/delete', 'PhoneController@delete');

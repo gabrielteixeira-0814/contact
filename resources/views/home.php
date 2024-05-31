@@ -108,20 +108,18 @@
                         <table id="example" class="table table-striped table-bordered text-center" style="width:100%">
                           <thead>
                           <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Name</th>
                             <th scope="col">E-mail</th>
-                            <th scope="col">Ações</th>
+                            <th scope="col">Actions</th>
                           </tr>
                         </thead>
                         <tbody>
                         <tr v-for="contact in contactList" :key="contact.id" :value="contact.id">
-                          <th scope="row">{{ contact.id }}</th>
                           <td>{{ contact.name }}</td>
                           <td>{{ contact.email }}</td>
                             <td>
-                                <a href="#" class='btn btn-secondary btn-sm mr-1'><i class="fa fa-phone-square" style="font-size: 13px;"></i></a>
-                                <a href="#" class='btn btn-primary btn-sm mr-1' data-toggle="modal" data-target="#phoneModal"><i class="fa fa-phone" style="font-size: 13px;" ></i></a>
+                                <a href="#" class='btn btn-secondary btn-sm mr-1' data-toggle="modal" data-target="#phoneListModal" @click="getContactPhones(contact.id)"><i class="fa fa-phone-square" style="font-size: 13px;"></i></a>
+                                <a href="#" class='btn btn-primary btn-sm mr-1' data-toggle="modal" data-target="#phoneModal" @click="getContact(contact.id)"><i class="fa fa-phone" style="font-size: 13px;" ></i></a>
                                 <a href="#" class='btn btn-success btn-sm mr-1' data-toggle="modal" data-target="#editContactModal" @click="getContact(contact.id)">
                                   <i class="fa fa-align-justify" style="font-size: 13px;"></i>
                                 </a>
@@ -255,7 +253,50 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click="createPhones()">Save</button>
+                    <button type="button" class="btn btn-primary" @click="createPhones(getContactId)">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              <!-- Modal Phone List -->
+            <div class="modal fade" id="phoneListModal" tabindex="-1" aria-labelledby="phoneListModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="phoneListModalLabel">Phone list</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span> 
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-12 p-3">
+                        <h4>{{ contactNameTitle }}</h4>
+                        <div class="my-5">
+                            <table id="example" class="table table-striped table-bordered text-center" style="width:100%">
+                              <thead>
+                              <tr>
+                                <th scope="col">Number</th>
+                                <th scope="col">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="phone in phoneList" :key="phone.id" :value="phone.id">
+                              <td>{{ phone.number }}</td>
+                                <td>
+                                    <a href="#" class='btn btn-danger btn-sm' @click="deletePhone(phone.id, contactIdReloadTable)"><i class="fa fa-trash" style="font-size: 13px;"></i></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" @click="createPhones(getContactId)">Save</button>
                   </div>
                 </div>
               </div>
@@ -290,7 +331,11 @@
           return {
             selectedUser: '',
             userNameTitle: '',
+            contactNameTitle: '',
             userIdReloadTable: '',
+            contactIdReloadTable: '',
+
+            getContactId: '',
 
             // Input User
             name: '',
@@ -309,6 +354,9 @@
             contactCity: '',
             ContactState: '',
 
+            // Input Phone
+            number: '',
+
             // Edit Contact
             editContactId: '',
             editContactName: '',
@@ -324,6 +372,7 @@
 
             userslist: [],
             contactList: [],
+            phoneList: [],
 
             isLoading: false
           }
@@ -380,6 +429,7 @@
                   const res = await axios.get(`/contact/web/contact/${contactId}`); 
 
                   if (res.data.success) {
+                    this.getContactId= res.data.message.id;
 
                     // Input Contact
                     this.editContactId= res.data.message.id;
@@ -392,6 +442,7 @@
                     this.editContactNumber= res.data.message.address.number;
                     this.editContactCity= res.data.message.address.city;
                     this.editContactState= res.data.message.address.state;
+
 
                     // console.log(res.data.message);
                   } 
@@ -568,7 +619,6 @@
           async deleteContact(contactId, userIdReloadTable) {
 
             if (window.confirm('Delete this contact')) {
-              console.log(contactId);
               try {
                   const res = await axios.delete(`/contact/web/contact/${contactId}/delete`); 
 
@@ -583,41 +633,60 @@
               }
             }
           },
-          async createPhones(contactId) {
+          async createPhones(getContactId) {
             
-            if (this.contactPublic_place !== '' &&
-                this.contactNeighborhood !== '' &&
-                this.contactNumber !== '' &&
-                this.contactCity !== '' &&
-                this.ContactState
-              ) { 
+            if (getContactId !== '' && this.number !== '') { 
 
               const data = {
-                contact_id: contactId,
-                number: this.contactNumber,
-                public_place: this.contactPublic_place,
-                neighborhood: this.contactNeighborhood,
-                city: this.contactCity,
-                state: this.ContactState
+                contact_id: getContactId,
+                number: this.number
               };
 
+              console.log(data);
+
               try {
-                  const res = await axios.post('/contact/web/address/create', data);
-
+                  const res = await axios.post('/contact/web/phones/create', data);
                   if (res.data.success) {
-                    console.log('Adrress created successfully');
-                    this.contactNumber = '';
-                    this.contactPublic_place = '';
-                    this.contactNeighborhood = '';
-                    this.contactCity = '';
-                    this.ContactState = '';
-
-                    return true;
+                    alert('Phone created successfully');
+                    this.number = '';
                   }
+
               } catch (err) {
                 console.log(err.response.data.message);
+                alert(err.response.data.message);
 
-                return false;
+              }
+            }
+          },
+          async getContactPhones(contactId) {
+              try {
+                  const res = await axios.get(`/contact/web/contact/${contactId}`); 
+
+                  if (res.data.success) {
+                    this.contactNameTitle = res.data.message.name;
+                    this.contactIdReloadTable = res.data.message.id;
+                    this.phoneList = res.data.message.phones;
+                  } 
+
+              } catch (err) {
+                  console.log(err);
+
+              }
+          },
+          async deletePhone(phoneId, contactIdReloadTable) {
+
+            if (window.confirm('Delete this phone')) {
+              try {
+                  const res = await axios.delete(`/contact/web/phones/${phoneId}/delete`); 
+
+                  if (res.data.success) {
+                    // console.log(res.data.message);
+                    this.getContactPhones(contactIdReloadTable);
+                    alert(res.data.message);
+                  } 
+              } catch (err) {
+                  // console.log(err.response.data.message);
+                  alert(err.response.data.message);
               }
             }
           },

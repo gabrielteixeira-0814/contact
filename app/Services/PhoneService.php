@@ -37,6 +37,22 @@ class PhoneService
         }
         catch (Exception $e) {
 
+            if (isset($e->errorInfo[0])) {
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+            }
+
+            $errorInfo = json_decode($e->getMessage(), true);
+
+            if (isset($errorInfo['contact_id'])) {
+                $error = $errorInfo['contact_id']['contact_id'];
+                return ['error' => $error];
+            }
+
+            if (isset($errorInfo['number'])) {
+                $error = $errorInfo['number']['number'];
+                return ['error' => $error];
+            }
+
             return ['error' => $e->getMessage()];
         }
     }
