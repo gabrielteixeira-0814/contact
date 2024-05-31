@@ -64,19 +64,19 @@ class Validator
                     'contact_id' => v::intVal()->positive()
                         ->setName('Contact ID')
                         ->setTemplate('{{name}} must be a positive integer'),
-                    'number' => v::digit()->length(1, 5)
+                    'number' => v::optional(v::digit()->length(1, 5))
                         ->setName('Number')
                         ->setTemplate('{{name}} must be between 1 and 5 characters long and contain only digits'),
-                    'public_place' => v::stringType()->length(3, 50)
+                    'public_place' => v::optional(v::stringType()->length(3, 50))
                         ->setName('Public place')
                         ->setTemplate('{{name}} must be between 3 and 50 characters'),
-                    'neighborhood' => v::stringType()->length(3, 50)
+                    'neighborhood' => v::optional(v::stringType()->length(3, 50))
                         ->setName('Neighborhood')
                         ->setTemplate('{{name}} must be between 3 and 50 characters'),
-                    'city' => v::stringType()->length(3, 50)
+                    'city' => v::optional(v::stringType()->length(3, 50))
                         ->setName('City')
                         ->setTemplate('{{name}} must be between 3 and 50 characters'),
-                    'state' => v::stringType()->length(1, 10)
+                    'state' => v::optional(v::stringType()->length(1, 10))
                         ->setName('State')
                         ->setTemplate('{{name}} must be between 1 and 10 characters')
                 ];

@@ -20,7 +20,7 @@ class ContactRepository implements ContactRepositoryInterface
     {
         try {
 
-            return $this->model->with('users')->with('address')->with('phones')->get();
+            return $this->model->with('users')->with('address')->with('phones')->orderBy('name', 'asc')->get();
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
@@ -48,6 +48,13 @@ class ContactRepository implements ContactRepositoryInterface
 
     public function store(array $data)
     {
+        if ($contact = $this->model->where('email', '=', $data['email'])->count()) {
+
+            if ($contact > 0) {
+                return ['error' => 'Sorry, Sorry, this email is already registered.'];
+            }
+        }
+
         try {
 
             return $this->model->create($data);

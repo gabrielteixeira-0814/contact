@@ -44,7 +44,8 @@ class AddressService
         catch (Exception $e) {
 
             if (isset($e->errorInfo[0])) {
-                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
+                if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database'];
+                if ($e->errorInfo[0] === '23000') return ['error' => 'Sorry, no contact has been linked to this address'];
             }
 
             $errorInfo = json_decode($e->getMessage(), true);

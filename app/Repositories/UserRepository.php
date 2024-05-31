@@ -20,7 +20,7 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
 
-            return $this->model->with('contacts')->get();
+            return $this->model->with('contacts')->orderBy('name', 'asc')->get();
         }
         catch (Exception $e) {
             if ($e->errorInfo[0] === '08006') return ['error' => 'Sorry, we could not connect to the database.'];
@@ -32,7 +32,9 @@ class UserRepository implements UserRepositoryInterface
     public function get($id)
     {
         try {
-            if (!$user = $this->model->with('contacts')->find($id)) {
+            if (!$user = $this->model->with(['contacts' => function ($query) {
+                $query->orderBy('name', 'asc');
+                }])->find($id)) {
 
                 return ['error' => 'Sorry, the user could not be found.'];
             }

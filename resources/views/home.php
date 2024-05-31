@@ -18,34 +18,26 @@
   <body class="">
     <div class="container-fluid">
         <div class="row" id="app">
-            <div class="col-md-3 bg-white rounded  shadow-lg p-5">
-              <h1>Welcome</h1>
-              <div class="mt-5">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">User +</button>
+            <div class="col-md-3">
+              <div class="row justify-content-center mt-5">
+                  <div class="col-md-9 bg-white rounded  shadow-lg p-4">
+                    <h3>Welcome   :)</h3>
+                    <div class="mt-5">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#userModal">User +</button>
+                    </div>
+                    <div class="mt-3">
+                        <form>
+                            <div class="form-group">
+                                <label for="selectUsers" class="font-weight-bold">Users</label>
+                                <select class="form-control" v-model="selectedUser" @change="getUserContacts(selectedUser)">
+                                  <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="mt-3">
-                  <form>
-                      <div class="form-group">
-                          <label for="selectUsers" class="font-weight-bold">Users</label>
-                          <select class="form-control" v-model="selectedUser" @change="getUserContacts(selectedUser)">
-                            <option v-for="user in userslist" :key="user.id" :value="user.id">{{ user.name }} - {{ user.email }}</option>
-                          </select>
-                      </div>
-                  </form>
-              </div>
-              <div class="mt-4">
-                  <a class="button-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
-                      <span>:=</span>
-                      <span>Contatos</span>
-                  </a>
-              </div>
-              <div class="mt-4">
-                  <a class="button-list-contact" target="_blank" href="https://dashboardpack.com/theme-details/analytic-dashboard/">
-                      <span>:=</span>
-                      <span>Lista de Contatos</span>
-                  </a>
-              </div>
-            </div>
             <div class="col-md-9">
               <div class="row justify-content-center mt-5">
                 <div class="col-md-8 bg-white rounded  shadow-lg p-5">
@@ -148,7 +140,7 @@
                   <div class="modal-body">
                     <form @submit.prevent="createUser">
                       <div class="form-group">
-                          <label for="name">Nome</label>
+                          <label for="name">Name</label>
                           <input type="email" class="form-control" v-model="userName">
                       </div>
                       <div class="form-group">
@@ -156,11 +148,11 @@
                           <input type="email" class="form-control" v-model="email">
                       </div>
                       <div class="form-group">
-                          <label for="password">Senha</label>
+                          <label for="password">Password</label>
                           <input type="password" class="form-control" v-model="password">
                       </div>
                       <div class="form-group">
-                          <label for="password_confirmation">Confirma senha</label>
+                          <label for="password_confirmation">Password Confirmation</label>
                           <input type="password" class="form-control" v-model="password_confirmation">
                       </div>
                     </form>
@@ -405,7 +397,7 @@
 
                         })
                         .catch(error => {
-                          console.error("Erro ao executar a promise:", error);
+                          console.error("Erro promise:", error);
                         });
                     }
 
@@ -443,7 +435,6 @@
                     this.editContactCity= res.data.message.address.city;
                     this.editContactState= res.data.message.address.state;
 
-
                     // console.log(res.data.message);
                   } 
               } catch (err) {
@@ -451,8 +442,6 @@
               }
           },
           async updateContact(contactId, addressId) {
-            console.log(contactId, 'contactIdaaa', addressId);
-
             if (contactId !== '' && this.editContactName !== '' && this.editContactEmail !== '') {
                 const data = {
                   user_id: contactId,

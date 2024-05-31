@@ -58,12 +58,10 @@ class Router
         $requestMethod = Request::method();
         $requestUri = Request::uri();
 
-        // Remove prefix if it exists
         if (self::$prefix && strpos($requestUri, self::$prefix) === 0) {
             $requestUri = substr($requestUri, strlen(self::$prefix));
         }
 
-        // Debugging output
         error_log("Request Method: $requestMethod");
         error_log("Request URI: $requestUri");
 
@@ -221,7 +219,6 @@ class Router
             }
         }
 
-        // If no route was found, return a 404 error
         error_log("No route matched. Returning 404.");
         Response::json(['error' => 'Route not found'], 404);
     }

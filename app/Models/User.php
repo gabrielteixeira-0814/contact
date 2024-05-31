@@ -19,7 +19,7 @@ class User extends Eloquent
 
     public function contacts() {
 
-        return $this->hasMany(Contact::class, 'user_id');
+        return $this->hasMany(Contact::class)->orderBy('name', 'asc');
     }
 }
 
