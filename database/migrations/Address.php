@@ -17,7 +17,7 @@ class Address
             $table->string("neighborhood");
             $table->string("city");
             $table->string("state");
-            $table->foreign('contact_id')->references('id')->on('contacts');
+            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('cascade');
             $table->timestamps();
         });
     }

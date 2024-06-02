@@ -73,6 +73,15 @@ class ContactRepository implements ContactRepositoryInterface
                 return ['error'=> 'Sorry, Unable to find contact'];
             }
 
+            if ($contact['email'] !== $data['email']) {
+                $countContact = $this->model->where('user_id', '=', $data['user_id'])->where('email', '=', $data['email'])->count();
+
+                if ($countContact > 0) {
+
+                    return ['error' => 'Sorry, Sorry, this email is already registered.'];
+                }
+            }
+
             if (!$contact->update($data)) {
 
                 return ['error'=> 'Sorry, Unable to edit contact.'];

@@ -81,7 +81,7 @@
                           </div>
                           <div class="form-group col-md-4">
                             <label for="inputState">State</label>
-                            <select id="inputState" v-model="ContactState" class="form-control">
+                            <select id="inputState" v-model="contactState" class="form-control">
                               <option selected>Select</option>
                               <option value="RJ">RJ</option>
                               <option value="RS">RS</option>
@@ -344,7 +344,7 @@
             contactNeighborhood: '',
             contactNumber: '',
             contactCity: '',
-            ContactState: '',
+            contactState: '',
 
             // Input Phone
             number: '',
@@ -400,8 +400,10 @@
                         });
                     }
 
-                    this.isLoading = false;
                     alert('Contact created successfully');
+
+                    this.getUserContacts(this.selectedUser);
+                    this.isLoading = false;
                     this.selectedUser = '';
                     this.contactName = '';
                     this.contactEmail = '';
@@ -434,13 +436,14 @@
                     this.editContactCity= res.data.message.address.city;
                     this.editContactState= res.data.message.address.state;
 
-                    console.log(res.data.message);
+                    // console.log(res.data.message);
                   } 
               } catch (err) {
                   console.log(err);
               }
           },
           async updateContact(contactId, addressId) {
+
             if (contactId !== '' && this.editContactName !== '' && this.editContactEmail !== '') {
                 const data = {
                   user_id: contactId,
@@ -474,7 +477,7 @@
                   }
                 } catch (err) {
 
-                  alert(err);
+                  alert('Unable to edit the contact');
                 }
             }
           },
@@ -539,12 +542,12 @@
             if (contactId) {
 
               const data = {
-                contact_id: contactId ?? null,
-                number: this.editContactNumber ?? 0,
-                public_place: this.editContactPublic_place ?? '',
-                neighborhood: this.editContactNeighborhood ?? '',
-                city: this.editContactCity ?? '',
-                state: this.editContactState ?? ''
+                contact_id: contactId,
+                number: this.contactNumber ?? 0,
+                public_place: this.contactPublic_place ?? '',
+                neighborhood: this.contactNeighborhood ?? '',
+                city: this.contactCity ?? '',
+                state: this.contactState ?? ''
               };
 
               try {
@@ -555,7 +558,7 @@
                     this.contactPublic_place = '';
                     this.contactNeighborhood = '';
                     this.contactCity = '';
-                    this.ContactState = '';
+                    this.contactState = '';
 
                     console.log('Adrress created successfully');
                     return true;

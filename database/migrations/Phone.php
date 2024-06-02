@@ -13,7 +13,7 @@ class Phone
             $table->increments("id");
             $table->integer("contact_id")->unsigned();
             $table->string("number");
-            $table->foreign('contact_id')->references('id')->on('contacts');
+            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('cascade');
             $table->timestamps();
         });
     }
