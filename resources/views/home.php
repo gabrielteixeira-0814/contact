@@ -43,7 +43,7 @@
                 <div class="col-md-10 bg-white rounded  shadow-lg p-5">
                   <div class="row align-items-center justify-content-between px-3">
                     <div>
-                      <h2>Create Contact</h2>
+                      <h3>Create Contact</h3>
                     </div>
                     <div v-if="userNameTitle">
                       <i class="fas fa-user" style="font-size: 20px;"></i>
@@ -95,7 +95,7 @@
                   </div>
                 </div>
                 <div class="col-md-10 bg-white rounded  shadow-lg p-5 my-5">
-                  <h2>Lista Contacts</h2>
+                  <h3>List Contacts</h3>
                     <div class="my-5">
                         <table id="example" class="table table-striped table-bordered text-center" style="width:100%">
                           <thead>
@@ -387,14 +387,13 @@
                   if (res.data.success) {
                     if (res.data.data.id) {
 
-                      this.updateAddress(res.data.data.id)
+                      this.createAddress(res.data.data.id)
                         .then(result => {
                           if (result) {
                             console.log("The address was created successfully");
                           } else {
                             console.log("Unable to create address");
                           }
-
                         })
                         .catch(error => {
                           console.error("Erro promise:", error);
@@ -435,7 +434,7 @@
                     this.editContactCity= res.data.message.address.city;
                     this.editContactState= res.data.message.address.state;
 
-                    // console.log(res.data.message);
+                    console.log(res.data.message);
                   } 
               } catch (err) {
                   console.log(err);
@@ -537,33 +536,28 @@
           },
           async createAddress(contactId) {
             
-            if (this.contactPublic_place !== '' &&
-                this.contactNeighborhood !== '' &&
-                this.contactNumber !== '' &&
-                this.contactCity !== '' &&
-                this.ContactState
-              ) { 
+            if (contactId) {
 
               const data = {
-                contact_id: contactId,
-                number: this.contactNumber,
-                public_place: this.contactPublic_place,
-                neighborhood: this.contactNeighborhood,
-                city: this.contactCity,
-                state: this.ContactState
+                contact_id: contactId ?? null,
+                number: this.editContactNumber ?? 0,
+                public_place: this.editContactPublic_place ?? '',
+                neighborhood: this.editContactNeighborhood ?? '',
+                city: this.editContactCity ?? '',
+                state: this.editContactState ?? ''
               };
 
               try {
                   const res = await axios.post('/contact/web/address/create', data);
 
                   if (res.data.success) {
-                    console.log('Adrress created successfully');
                     this.contactNumber = '';
                     this.contactPublic_place = '';
                     this.contactNeighborhood = '';
                     this.contactCity = '';
                     this.ContactState = '';
 
+                    console.log('Adrress created successfully');
                     return true;
                   }
               } catch (err) {
@@ -574,27 +568,21 @@
             }
           },
           async updateAddress(contactId, addressId) {
-            if (this.editContactPublic_place !== '' &&
-                this.editContactNeighborhood !== '' &&
-                this.editContactNumber !== '' &&
-                this.editContactCity !== '' &&
-                this.editContactState
-              ) { 
+            if (contactId && addressId) {
 
               const data = {
-                contact_id: contactId,
-                number: this.editContactNumber,
-                public_place: this.editContactPublic_place,
-                neighborhood: this.editContactNeighborhood,
-                city: this.editContactCity,
-                state: this.editContactState
+                contact_id: contactId ?? null,
+                number: this.editContactNumber ?? 0,
+                public_place: this.editContactPublic_place ?? '',
+                neighborhood: this.editContactNeighborhood ?? '',
+                city: this.editContactCity ?? '',
+                state: this.editContactState ?? ''
               };
 
               try {
                   const res = await axios.put(`/contact/web/address/update/${addressId}`, data);
 
                   if (res.data.success) {
-                    console.log('Adrress edit successfully');
 
                     return true;
                   }
@@ -603,6 +591,9 @@
 
                 return false;
               }
+            } else {
+              console.log('Unable to edit address');
+              return false;
             }
           },
           async deleteContact(contactId, userIdReloadTable) {

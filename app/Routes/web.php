@@ -10,10 +10,6 @@ function webRoute($method, $route, $action) {
     Router::$method($prefix . $route, $action);
 }
 
-webRoute('get', '/', function() {
-    echo 'Hello World';
-});
-
 /**
  * Home
  */

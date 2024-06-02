@@ -112,7 +112,7 @@ class ContactController extends RenderView
             return $response::json([
                 'error'   => true,
                 'success' => false,
-                'message' => 'Unable to create update'
+                'message' => 'Unable to update'
             ], 400); 
         }
 

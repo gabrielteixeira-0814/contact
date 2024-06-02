@@ -48,7 +48,7 @@ class ContactRepository implements ContactRepositoryInterface
 
     public function store(array $data)
     {
-        if ($contact = $this->model->where('email', '=', $data['email'])->count()) {
+        if ($contact = $this->model->where('user_id', '=', $data['user_id'])->where('email', '=', $data['email'])->count()) {
 
             if ($contact > 0) {
                 return ['error' => 'Sorry, Sorry, this email is already registered.'];
